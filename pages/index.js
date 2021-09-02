@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Hero from '../src/components/Hero';
-import SCard from '../src/components/Scard';
+import SCard from '../src/components/SCard';
 import MedCard from '../src/components/MedCard';
 import LgCard from '../src/components/LgCard';
 import Header from '../src/components/Header';
@@ -21,7 +21,7 @@ export default function Home({ exploreData, cardData }) {
         <div className="explore">
           {exploreData.map(({ img, location, distance }) => (
             <SCard
-              key={img}
+              key={location}
               img={img}
               distance={distance}
               location={location}
