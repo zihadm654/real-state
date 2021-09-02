@@ -1,0 +1,23 @@
+@use '../constant/mixins' as m;
+@use '../constant/variables' as v;
+footer {
+  padding: 4rem 8rem;
+  background: rgb(228, 228, 228);
+  .container {
+    @include m.grid();
+    div {
+      @include m.media(sm) {
+        grid-column: span 6;
+      }
+      grid-column: span 3;
+      h5 {
+        font-weight: 600;
+        padding-bottom: 1.5rem;
+      }
+      p {
+        padding: 0.7rem 0;
+        font-size: v.$sm;
+      }
+    }
+  }
+}

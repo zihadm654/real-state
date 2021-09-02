@@ -1,0 +1,56 @@
+@use '../constant/variables' as v;
+@use '../constant/mixins' as m;
+
+.info__card {
+  position: relative;
+  margin: 4rem 0;
+  @include m.flex(flex-start);
+  transition: all 200ms ease-in-out;
+  padding: 1.5rem 0 3rem 0;
+  &:hover {
+    box-shadow: 3px 5px 13px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+  .img__container {
+    position: relative;
+    height: 22rem;
+    width: 30rem;
+    flex-shrink: 0;
+    img {
+      border-radius: 1.5rem;
+    }
+  }
+  .content {
+    @include m.flex(flex-start);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 2rem;
+    &__first {
+      width: 100%;
+      @include m.flex(space-between);
+      h5 {
+        padding: 1.7rem 0;
+      }
+      svg {
+        height: 3rem;
+        width: 3rem;
+      }
+    }
+    &__third {
+      padding-top: 2.4rem;
+      @include m.flex(space-between);
+      width: 100%;
+      .star {
+        @include m.flex(center);
+        svg {
+          color: #f87171;
+          height: 2.8rem;
+          width: 2.8rem;
+          cursor: pointer;
+        }
+      }
+      .price {
+      }
+    }
+  }
+}

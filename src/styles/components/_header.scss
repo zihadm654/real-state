@@ -1,0 +1,132 @@
+@use '../constant/base' as b;
+@use '../constant/colors' as c;
+@use '../constant/mixins' as m;
+@use '../constant/variables' as v;
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: white;
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.097);
+  padding: 1rem 3rem;
+  nav {
+    @include m.flex(space-between);
+    .nav__left {
+      position: relative;
+      cursor: pointer;
+      height: 5rem;
+      width: 11rem;
+      margin: auto 0;
+      @include m.flex(center);
+    }
+    .nav__center {
+      @include m.media(sm) {
+        box-shadow: none;
+        border: none;
+        padding: 0 2rem;
+      }
+      @include m.flex(center);
+      border: 1px solid rgba(128, 128, 128, 0.39);
+      border-radius: 3rem;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048);
+      min-width: 35rem;
+      @include m.media(sm) {
+        min-width: 10rem;
+      }
+      input {
+        border: none;
+        outline: none;
+        flex: 1;
+      }
+      svg {
+        @include m.media(sm) {
+          display: none;
+        }
+        margin-left: 0.7rem;
+        height: 3rem;
+        padding: 0.4rem;
+        background-color: #f87171;
+        color: #fff;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        display: inline-flex;
+      }
+    }
+    .nav__right {
+      @include m.flex(space-evenly);
+      color: gray;
+      font-size: v.$sm;
+      p {
+        padding-right: 0.7rem;
+        @include m.media(sm) {
+          display: none;
+        }
+        @include m.media(md) {
+          display: none;
+        }
+      }
+      svg {
+        height: 3rem;
+        cursor: pointer;
+        // margin: 0 0.5rem;
+      }
+      div {
+        padding: 1.5rem 1rem;
+        border-radius: 2rem;
+        margin: 0 1rem;
+        border: 1px solid rgba(128, 128, 128, 0.712);
+        @include m.flex(space-between);
+        height: 3.5rem;
+      }
+    }
+  }
+  .calender {
+    @include m.flex(flex-start);
+    flex-direction: column;
+    .info {
+      svg {
+        height: 3rem;
+      }
+      .users__info {
+        @include m.flex(space-evenly);
+        svg {
+          height: 2.2rem;
+          cursor: pointer;
+        }
+        input {
+          margin-left: 0.4rem;
+          height: 2rem;
+          width: 4.4rem;
+          font-size: v.$sm;
+          padding: 0 0.3rem;
+          color: #fd5b61;
+          outline: none;
+          border: none;
+        }
+      }
+      width: 62%;
+      max-width: 65%;
+      @include m.flex(space-around);
+    }
+    .buttons {
+      margin-top: 1.5rem;
+      width: 42%;
+      max-width: 45%;
+      @include m.flex(space-around);
+      button {
+        &:nth-child(2) {
+          color: #fd5b61;
+        }
+        outline: none;
+        border: none;
+        font-weight: 700;
+        background: transparent;
+        cursor: pointer;
+      }
+    }
+  }
+}
