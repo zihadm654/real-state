@@ -6,10 +6,11 @@ const Banner = () => {
         src="https://links.papareact.com/0fm"
         layout="fill"
         objectFit="cover"
+        alt="title"
       />
       <div className="content">
         <p>Not sure where to go? Perfect</p>
-        <button>I'm flexible</button>
+        <button>I&apos;m flexible</button>
       </div>
     </div>
   )
