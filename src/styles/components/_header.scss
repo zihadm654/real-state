@@ -37,6 +37,9 @@ header {
         min-width: 10rem;
       }
       input {
+        @include m.media(sm) {
+          text-align: center;
+        }
         border: none;
         outline: none;
         flex: 1;
