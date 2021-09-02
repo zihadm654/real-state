@@ -8,6 +8,7 @@ const InfoCard = ({ img, title, location, star, price, total, description, }) =>
         <div className="img__container">
           <Image src={img} layout="fill"
             objectFit="cover"
+            alt="img"
           />
         </div>
         <div className="content">

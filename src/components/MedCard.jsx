@@ -3,7 +3,7 @@ const MedCard = ({ img, title }) => {
   return (
     <div className="medcard">
       <div className="img__container">
-        <Image src={img} layout="fill" />
+        <Image src={img} layout="fill" alt="img" />
       </div>
       <h4>{title}</h4>
     </div>

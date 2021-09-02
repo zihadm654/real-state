@@ -4,7 +4,7 @@ const LgCard = ({ img, title, buttonText, description }) => {
   return (
     <div className="large__card">
       <div className="img__container">
-        <Image src={img} layout="fill" />
+        <Image src={img} layout="fill" alt="img" />
       </div>
       <div className="content">
         <h3>{title}</h3>

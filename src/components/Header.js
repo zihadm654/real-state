@@ -49,7 +49,7 @@ function Header({ placeholder }) {
         <div onClick={() => router.push('/')} className="nav__left">
           <Image
             src="https://links.papareact.com/qd3"
-            alt=""
+            alt="img"
             layout="fill"
             objectFit="contain"
             objectPosition="left"
