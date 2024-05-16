@@ -1,51 +1,54 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { useSelectedLayoutSegment } from "next/navigation"
+import * as React from "react";
+import Link from "next/link";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 // import { MainNavItem } from "types"
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/shared/icons"
-import { MobileNav } from "@/components/layout/mobile-nav"
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import { MobileNav } from "@/components/layout/mobile-nav";
+import { Icons } from "@/components/shared/icons";
+
+import Search from "../navbar/Search";
+import UserMenu from "../navbar/UserMenu";
 
 interface MainNavProps {
-  items?: any[]
-  children?: React.ReactNode
+  items?: any[];
+  children?: React.ReactNode;
 }
 
 export function MainNav({ items, children }: MainNavProps) {
-  const segment = useSelectedLayoutSegment()
-  const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
+  const segment = useSelectedLayoutSegment();
+  const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
 
   const toggleMobileMenu = () => {
-    setShowMobileMenu(!showMobileMenu)
-  }
+    setShowMobileMenu(!showMobileMenu);
+  };
 
   React.useEffect(() => {
     const closeMobileMenuOnClickOutside = (event: MouseEvent) => {
       if (showMobileMenu) {
-        setShowMobileMenu(false)
+        setShowMobileMenu(false);
       }
-    }
+    };
 
-    document.addEventListener("click", closeMobileMenuOnClickOutside)
+    document.addEventListener("click", closeMobileMenuOnClickOutside);
 
     return () => {
-      document.removeEventListener("click", closeMobileMenuOnClickOutside)
-    }
-  }, [showMobileMenu])
+      document.removeEventListener("click", closeMobileMenuOnClickOutside);
+    };
+  }, [showMobileMenu]);
 
   return (
-    <div className="flex gap-6 md:gap-10">
+    <div className="flex items-center justify-center gap-6 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
         <Icons.logo />
-        <span className="hidden font-urban text-xl font-bold sm:inline-block">
+        <span className="font-urban hidden text-xl font-bold sm:inline-block">
           {siteConfig.name}
         </span>
       </Link>
-      {items?.length ? (
+      {/* {items?.length ? (
         <nav className="hidden gap-6 md:flex">
           {items?.map((item, index) => (
             <Link
@@ -57,14 +60,14 @@ export function MainNav({ items, children }: MainNavProps) {
                 item.href.startsWith(`/${segment}`)
                   ? "text-foreground"
                   : "text-foreground/60",
-                item.disabled && "cursor-not-allowed opacity-80"
+                item.disabled && "cursor-not-allowed opacity-80",
               )}
             >
               {item.title}
             </Link>
           ))}
         </nav>
-      ) : null}
+      ) : null} */}
       <button
         className="flex items-center space-x-2 md:hidden"
         onClick={toggleMobileMenu}
@@ -76,5 +79,5 @@ export function MainNav({ items, children }: MainNavProps) {
         <MobileNav items={items}>{children}</MobileNav>
       )}
     </div>
-  )
+  );
 }

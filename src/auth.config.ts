@@ -4,8 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-import { env } from "@/env.mjs";
-
+import { env } from "../env.mjs";
 import { getUserByEmail } from "./lib/user";
 import { LoginSchema } from "./lib/validations/schema";
 

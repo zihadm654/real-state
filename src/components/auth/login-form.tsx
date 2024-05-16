@@ -4,13 +4,13 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { login } from "@/actions/login";
-import { LoginSchema } from "@/utils/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { cn } from "@/lib/utils";
+import { LoginSchema } from "@/lib/validations/schema";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,

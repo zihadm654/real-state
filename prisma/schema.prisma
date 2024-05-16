@@ -2,76 +2,215 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
-model User {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
-  name            String?
-  email           String?   @unique
-  emailVerified   DateTime?
-  image           String?
-  hashedPassword  String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  favoriteIds     String[] @db.ObjectId
+enum UserRole {
+  ADMIN
+  USER
+}
 
-  accounts Account[]
-  listings Listing[]
-  reservations Reservation[]
+enum EventType {
+  OnlineEvent
+  OnsiteEvent
 }
 
 model Account {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String   @db.ObjectId
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.String
-  access_token       String?  @db.String
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.String
-  session_state      String?
+  id                String   @id @default(cuid()) @map("_id")
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now()) @map(name: "created_at")
+  updatedAt         DateTime @default(now()) @map(name: "updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map(name: "accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid()) @map("_id")
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "sessions")
+}
+
+model User {
+  id            String    @id @default(cuid()) @map("_id")
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  favoriteIds   String[]
+
+  accounts     Account[]
+  sessions     Session[]
+  listings     Listing[]
+  reservations Reservation[]
+  rooms Room[]
+
+  stripeCustomerId       String?                @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?                @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?                @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime?              @map(name: "stripe_current_period_end")
+  isTwoFactorEnabled     Boolean                @default(false)
+  twoFactorConfirmation  TwoFactorConfirmation?
+
+  @@map(name: "users")
+}
+
+model VerificationToken {
+  id      String   @id @default(cuid()) @map("_id")
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+  @@map(name: "verification_tokens")
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid()) @map("_id")
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id      String   @id @default(cuid()) @map("_id")
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  id String @id @default(cuid()) @map("_id")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
 }
 
 model Listing {
-  id             String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  description String
-  imageSrc String
-  createdAt DateTime @default(now())
-  category  String
-  roomCount Int
-  bathroomCount Int
-  guestCount Int
+  id            String   @id @default(cuid()) @map("_id")
+  userId        String
+  title         String
+  description   String
+  image         String
+  country       String
+  state         String
+  city          String
   locationValue String
-  userId String @db.ObjectId
-  price Int
+  gym           Boolean  @default(false)
+  spa           Boolean  @default(false)
+  bar           Boolean  @default(false)
+  laundry       Boolean  @default(false)
+  restaurant    Boolean  @default(false)
+  shopping      Boolean  @default(false)
+  freeparking   Boolean  @default(false)
+  bikeRental    Boolean  @default(false)
+  freeWifi      Boolean  @default(false)
+  movieNights   Boolean  @default(false)
+  swimmingPool  Boolean  @default(false)
+  coffeShop     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
+  Rooms        Room[]
+
+  // @@fulltext([title])
+  User User @relation(fields: [userId], references: [id],onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Room {
+  id             String  @id @default(cuid()) @map("_id")
+  title          String
+  description    String
+  bedCount       Int     @default(0)
+  guestCount     Int     @default(0)
+  bathroomCount  Int     @default(0)
+  kingBed        Int     @default(0)
+  queenBed       Int     @default(0)
+  image          String
+  breakfastPrice Int
+  roomPrice      Int
+  roomService    Boolean @default(false)
+  Tv             Boolean @default(false)
+  balcony        Boolean @default(false)
+  freeWifi       Boolean @default(false)
+  cityView       Boolean @default(false)
+  oceanView      Boolean @default(false)
+  mountainView   Boolean @default(false)
+  forestView     Boolean @default(false)
+  AC             Boolean @default(false)
+  soundProof     Boolean @default(false)
+
+  listingId String
+  Listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  reservation Reservation[]
+
+  @@index([listingId])
+  @@index([userId])
 }
 
 model Reservation {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  listingId String @db.ObjectId  
-  startDate DateTime
-  endDate DateTime
-  totalPrice Int
-  createdAt DateTime @default(now())
+  id                String   @id @default(cuid()) @map("_id")
+  userName          String
+  userId            String
+  listingId         String
+  roomId            String
+  listingOwnerId    String
+  startDate         DateTime
+  endDate           DateTime
+  breakfastIncluded Boolean
+  currency          String
+  totalPrice        Int
+  paymentStatus     Boolean  @default(false)
+  paymentIntentId   String   @unique
+  bookedAt          DateTime @default(now())
+  createdAt         DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  Room    Room?    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@index([roomId])
+  @@index([userId])
 }

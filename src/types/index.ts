@@ -1,4 +1,4 @@
-import { TListing, TPlaces } from "@/utils/schema";
+import { TListing, TPlaces } from "@/lib/validations/schema";
 
 export type User = {
   token: string;

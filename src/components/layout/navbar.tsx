@@ -9,6 +9,7 @@ import useScroll from "@/hooks/use-scroll";
 import { useSigninModal } from "@/hooks/use-signin-modal";
 import { Button, buttonVariants } from "@/components/ui/button";
 
+import Search from "../navbar/Search";
 import { Icons } from "../shared/icons";
 import { MainNav } from "./main-nav";
 import { UserAccountNav } from "./user-account-nav";
@@ -39,7 +40,7 @@ export function NavBar({
     >
       <div className="container flex h-[60px] items-center justify-between py-4">
         <MainNav items={items}>{children}</MainNav>
-
+        <Search />
         <div className="flex items-center space-x-3">
           {rightElements}
 
