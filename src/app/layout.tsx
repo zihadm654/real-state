@@ -1,38 +1,86 @@
-import './globals.css';
-import type { Metadata } from 'next';
-import { Nunito } from 'next/font/google';
-import Navbar from '@/components/navbar/Navbar';
-import ClientOnly from '@/components/ClientOnly';
-import RegisterModal from '@/components/modals/RegisterModal';
-import ToasterProvider from '@/Providers/ToasterProvider';
-import LoginModal from '@/components/modals/LoginModal';
-import getCurrentUser from '@/actions/getCurrentUser';
+import "@/styles/globals.css";
 
-const nunito = Nunito({ subsets: ['latin'] });
+import { fontHeading, fontSans, fontUrban } from "../../public/fonts";
+import { Analytics } from "@/components/analytics";
+import { ModalProvider } from "@/components/modal-provider";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { Toaster } from "@/components/ui/toaster";
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import { ThemeProvider } from "next-themes";
 
-export const metadata: Metadata = {
-  title: 'Airbnb Clone',
-  description: 'A fullstack airbnb clone',
-};
+interface RootLayoutProps {
+  children: React.ReactNode
+}
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const currentUser = await getCurrentUser();
+export const metadata = {
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: [
+    "Next.js",
+    "React",
+    "Prisma",
+    "Neon",
+    "Auth.js",
+    "shadcn ui",
+    "Resend",
+    "React Email",
+    "Stripe"
+  ],
+  authors: [
+    {
+      name: "mickasmt",
+    },
+  ],
+  creator: "mickasmt",
+  metadataBase: new URL(siteConfig.url),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+    creator: "@miickasmt",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: `${siteConfig.url}/site.webmanifest`,
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
 
   return (
-    <html lang='en'>
-      <body className={nunito.className}>
-        <ClientOnly>
-          <ToasterProvider />
-          <LoginModal />
-          <RegisterModal />
-          <Navbar currentUser={currentUser} />
-        </ClientOnly>
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+          fontUrban.variable,
+          fontHeading.variable
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+          <Analytics />
+          <Toaster />
+          <ModalProvider />
+          <TailwindIndicator />
+        </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
