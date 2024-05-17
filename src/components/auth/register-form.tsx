@@ -2,13 +2,13 @@
 
 import { useState, useTransition } from "react";
 import { register } from "@/actions/register";
-import { RegisterSchema } from "@/utils/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { cn } from "@/lib/utils";
+import { RegisterSchema } from "@/lib/validations/schema";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,

@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import * as z from 'zod';
-import { useForm } from 'react-hook-form';
-import { useState, useTransition } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
+import { newPassword } from "@/actions/new-password";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { NewPasswordSchema } from '@/utils/schema';
-import { Input } from '@/components/ui/input';
+import { NewPasswordSchema } from "@/lib/validations/schema";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,31 +16,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { CardWrapper } from '@/components/auth/card-wrapper';
-import { Button } from '@/components/ui/button';
-import { FormError } from '@/components/forms/form-error';
-import { FormSuccess } from '@/components/forms/form-success';
-import { newPassword } from '@/actions/new-password';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import { FormError } from "@/components/forms/form-error";
+import { FormSuccess } from "@/components/forms/form-success";
 
 export const NewPasswordForm = () => {
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
 
-  const [error, setError] = useState<string | undefined>('');
-  const [success, setSuccess] = useState<string | undefined>('');
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      password: '',
+      password: "",
     },
   });
 
   const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     startTransition(() => {
       newPassword(values, token).then((data) => {
@@ -51,16 +51,16 @@ export const NewPasswordForm = () => {
 
   return (
     <CardWrapper
-      headerLabel='Enter a new password'
-      backButtonLabel='Back to login'
-      backButtonHref='/auth/login'
+      headerLabel="Enter a new password"
+      backButtonLabel="Back to login"
+      backButtonHref="/auth/login"
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-          <div className='space-y-4'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
             <FormField
               control={form.control}
-              name='password'
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
@@ -68,8 +68,8 @@ export const NewPasswordForm = () => {
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder='******'
-                      type='password'
+                      placeholder="******"
+                      type="password"
                     />
                   </FormControl>
                   <FormMessage />
@@ -79,7 +79,7 @@ export const NewPasswordForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type='submit' className='w-full'>
+          <Button disabled={isPending} type="submit" className="w-full">
             Reset password
           </Button>
         </form>

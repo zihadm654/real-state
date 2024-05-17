@@ -1,7 +1,7 @@
 "use server";
 
 // import { uploadFile } from './upload';
-import { ListingSchema, TListing } from "@/utils/schema";
+import { ListingSchema, TListing } from "@/lib/validations/schema";
 
 export const addListing = async (data: TListing, token: string) => {
   try {

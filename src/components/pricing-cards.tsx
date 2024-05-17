@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-
-// import { UserSubscriptionPlan } from "@/types";
+import { UserSubscriptionPlan } from "@/types";
 
 import { pricingData } from "@/config/subscriptions";
 import { cn } from "@/lib/utils";
@@ -13,8 +12,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { BillingFormButton } from "@/components/forms/billing-form-button";
 import { HeaderSection } from "@/components/shared/header-section";
 import { Icons } from "@/components/shared/icons";
-
-// import { SubscriptionPlan } from "../types/index";
 
 interface PricingCardsProps {
   userId?: string;
@@ -45,7 +42,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
         key={offer.title}
       >
         <div className="min-h-[150px] items-start space-y-4 bg-muted/50 p-6">
-          <p className="flex font-urban text-sm font-bold uppercase tracking-wider text-muted-foreground">
+          <p className="font-urban flex text-sm font-bold uppercase tracking-wider text-muted-foreground">
             {offer.title}
           </p>
 
@@ -79,7 +76,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
 
         <div className="flex h-full flex-col justify-between gap-16 p-6">
           <ul className="space-y-2 text-left text-sm font-medium leading-normal">
-            {offer.benefits.map((feature) => (
+            {offer.benefits.map((feature: any) => (
               <li className="flex items-start gap-x-3" key={feature}>
                 <Icons.check className="size-5 shrink-0 text-purple-500" />
                 <p>{feature}</p>
@@ -87,7 +84,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
             ))}
 
             {offer.limitations.length > 0 &&
-              offer.limitations.map((feature) => (
+              offer.limitations.map((feature: any) => (
                 <li
                   className="flex items-start text-muted-foreground"
                   key={feature}

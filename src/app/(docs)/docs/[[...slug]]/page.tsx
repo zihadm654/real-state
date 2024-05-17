@@ -11,9 +11,8 @@ import "@/styles/mdx.css";
 
 import { Metadata } from "next";
 
+import { env } from "@/env.mjs";
 import { absoluteUrl } from "@/lib/utils";
-
-import { env } from "../../../../../env.mjs";
 
 interface DocPageProps {
   params: {

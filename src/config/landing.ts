@@ -1,6 +1,6 @@
-// import { InfoLdg } from "types";
+import { InfoLdg } from "@/types";
 
-export const infos: any[] = [
+export const infos: InfoLdg[] = [
   {
     title: "Empower your projects",
     description:

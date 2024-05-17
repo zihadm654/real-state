@@ -6,7 +6,7 @@ export async function getListings() {
   try {
     const listings = await prisma.listing.findMany();
     if (!listings) return null;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error);
   }
 }
@@ -14,13 +14,13 @@ export default async function getListing(listingId: string) {
   try {
     const listing = await prisma.listing.findUnique({
       where: {
-        id:listingId,
+        id: listingId,
       },
-      include:{
-        Rooms:true
-      }
+      include: {
+        Rooms: true,
+      },
     });
-    return listing
+    return listing;
   } catch (error: any) {
     throw new Error(error);
   }

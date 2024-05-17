@@ -2,8 +2,8 @@
 
 import { useTransition } from "react";
 import { generateUserStripe } from "@/actions/generate-user-stripe";
+import { User } from "@prisma/client";
 
-// import { SubscriptionPlan, UserSubscriptionPlan } from "types";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
@@ -24,8 +24,8 @@ export function BillingFormButton({
     offer.stripeIds[year ? "yearly" : "monthly"],
   );
 
-  const stripeSessionAction = () =>
-    startTransition(async () => await generateUserStripeSession());
+  // const stripeSessionAction = () =>
+  //   startTransition(async () => await generateUserStripeSession());
 
   const userOffer =
     subscriptionPlan.stripePriceId ===
@@ -37,7 +37,7 @@ export function BillingFormButton({
       rounded="full"
       className="w-full"
       disabled={isPending}
-      onClick={stripeSessionAction}
+      // onClick={stripeSessionAction}
     >
       {isPending ? (
         <>

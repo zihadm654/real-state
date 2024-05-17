@@ -3,8 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
+import { MainNavItem } from "@/types";
 
-// import { MainNavItem } from "types"
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/layout/mobile-nav";
@@ -14,7 +14,7 @@ import Search from "../navbar/Search";
 import UserMenu from "../navbar/UserMenu";
 
 interface MainNavProps {
-  items?: any[];
+  items?: MainNavItem[];
   children?: React.ReactNode;
 }
 

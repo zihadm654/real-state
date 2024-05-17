@@ -1,12 +1,12 @@
 "use server";
 
 import { getPasswordResetTokenByToken } from "@/utils/password-reset-token";
-import { NewPasswordSchema } from "@/utils/schema";
 import { getUserByEmail } from "@/utils/user";
 import bcrypt from "bcryptjs";
 import * as z from "zod";
 
 import { prisma } from "@/lib/db";
+import { NewPasswordSchema } from "@/lib/validations/schema";
 
 export const newPassword = async (
   values: z.infer<typeof NewPasswordSchema>,

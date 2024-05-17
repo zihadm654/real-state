@@ -1,6 +1,6 @@
-// import { DocsConfig } from "types";
+import { DocsConfig } from "@/types";
 
-export const docsConfig: any = {
+export const docsConfig: DocsConfig = {
   mainNav: [
     {
       title: "Documentation",
