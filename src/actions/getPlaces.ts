@@ -1,10 +1,10 @@
-'use server';
+"use server";
 
-import getCurrentUser from './getCurrentUser';
+import { currentUser } from "@/lib/auth";
 
 export async function getPlaces() {
-  const user = await getCurrentUser();
+  const user = await currentUser();
 }
 export default async function getPlace(id: string) {
-  const user = await getCurrentUser();
+  const user = await currentUser();
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-// import { MainNavItem } from "@/types";
-import { User } from "next-auth";
+import { MainNavItem } from "@/types";
+import type { User } from "next-auth";
 
 import { cn } from "@/lib/utils";
 import useScroll from "@/hooks/use-scroll";
@@ -16,7 +16,7 @@ import { UserAccountNav } from "./user-account-nav";
 
 interface NavBarProps {
   user: Pick<User, "name" | "image" | "email"> | undefined;
-  items?: any[];
+  items?: MainNavItem[];
   children?: React.ReactNode;
   rightElements?: React.ReactNode;
   scroll?: boolean;
