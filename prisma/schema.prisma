@@ -16,7 +16,7 @@ enum UserRole {
 }
 
 model Account {
-  id                String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
   type              String
   provider          String
@@ -26,7 +26,7 @@ model Account {
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.String
   session_state     String?
   createdAt         DateTime @default(now()) @map(name: "created_at")
   updatedAt         DateTime @default(now()) @map(name: "updated_at")
@@ -34,23 +34,21 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId])
   @@map(name: "accounts")
 }
 
 model Session {
-  id           String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String   @db.ObjectId
+  userId       String  @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
   @@map(name: "sessions")
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id") @db.ObjectId
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -77,7 +75,7 @@ model User {
 }
 
 model VerificationToken {
-  id      String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
   email   String
   token   String   @unique
   expires DateTime
@@ -87,7 +85,7 @@ model VerificationToken {
 }
 
 model PasswordResetToken {
-  id      String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id      String   @id @default(auto()) @map("_id")   @db.ObjectId
   email   String
   token   String   @unique
   expires DateTime
@@ -96,7 +94,7 @@ model PasswordResetToken {
 }
 
 model TwoFactorToken {
-  id      String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id      String   @id @default(auto()) @map("_id")   @db.ObjectId  
   email   String
   token   String   @unique
   expires DateTime
@@ -105,7 +103,7 @@ model TwoFactorToken {
 }
 
 model TwoFactorConfirmation {
-  id String @id @default(cuid()) @map("_id")  @db.ObjectId
+  id String @id @default(auto()) @map("_id")  @db.ObjectId
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -114,7 +112,7 @@ model TwoFactorConfirmation {
 }
 
 model Listing {
-  id            String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   userId        String  @db.ObjectId
   
   title         String
@@ -135,11 +133,10 @@ model Listing {
   // @@fulltext([title])
   user User @relation(fields: [userId], references: [id],onDelete: Cascade)
 
-  @@index([userId])
 }
 
 // model Room {
-//   id             String  @id @default(cuid()) @map("_id")
+//   id             String  @id @default(auto()) @map("_id")
 //   title          String
 //   description    String
 //   bedCount       Int     @default(0)
@@ -173,7 +170,7 @@ model Listing {
 // }
 
 model Reservation {
-  id                String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
   listingId         String  @db.ObjectId
   startDate         DateTime
@@ -186,7 +183,4 @@ model Reservation {
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
-
-  @@index([listingId])
-  @@index([userId])
 }
