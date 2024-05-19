@@ -52,18 +52,21 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/listings/new" className="flex items-center space-x-2.5">
+          <Link href="/listings" className="flex items-center space-x-2.5">
             <Plus className="size-4" />
-            <p className="text-sm">Add listing</p>
+            <p className="text-sm">My Listings</p>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link
-            href="/dashboard/billing"
-            className="flex items-center space-x-2.5"
-          >
+          <Link href="/favorites" className="flex items-center space-x-2.5">
             <CreditCard className="size-4" />
-            <p className="text-sm">Billing</p>
+            <p className="text-sm">My Favoirates</p>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/reservations" className="flex items-center space-x-2.5">
+            <Settings className="size-4" />
+            <p className="text-sm">My Reservations</p>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

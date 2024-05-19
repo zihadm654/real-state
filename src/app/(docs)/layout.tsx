@@ -1,8 +1,8 @@
 import Link from "next/link";
+import getCurrentUser from "@/actions/getCurrentUser";
 
 import { docsConfig } from "@/config/docs";
 import { siteConfig } from "@/config/site";
-import { currentUser } from "@/lib/auth";
 import { DocsSearch } from "@/components/docs/search";
 import { DocsSidebarNav } from "@/components/docs/sidebar-nav";
 import { NavBar } from "@/components/layout/navbar";
@@ -31,7 +31,7 @@ const rightHeader = () => (
 );
 
 export default async function DocsLayout({ children }: DocsLayoutProps) {
-  const user = await currentUser();
+  const user = await getCurrentUser();
 
   return (
     <div className="flex min-h-screen flex-col">

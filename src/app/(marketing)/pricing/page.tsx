@@ -1,4 +1,5 @@
-import { currentUser } from "@/lib/auth";
+import getCurrentUser from "@/actions/getCurrentUser";
+
 import { getUserSubscriptionPlan } from "@/lib/subscription";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PricingCards } from "@/components/pricing-cards";
@@ -9,7 +10,7 @@ export const metadata = {
 };
 
 export default async function PricingPage() {
-  const user = await currentUser();
+  const user = await getCurrentUser();
   let subscriptionPlan;
 
   if (user) {

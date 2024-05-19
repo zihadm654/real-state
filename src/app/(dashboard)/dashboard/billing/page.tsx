@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
+import getCurrentUser from "@/actions/getCurrentUser";
 
-import { currentUser } from "@/lib/auth";
 import { getUserSubscriptionPlan } from "@/lib/subscription";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BillingInfo } from "@/components/billing-info";
@@ -14,7 +14,7 @@ export const metadata = {
 };
 
 export default async function BillingPage() {
-  const user = await currentUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     redirect("/login");

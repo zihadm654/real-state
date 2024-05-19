@@ -9,6 +9,7 @@ import useScroll from "@/hooks/use-scroll";
 import { useSigninModal } from "@/hooks/use-signin-modal";
 import { Button, buttonVariants } from "@/components/ui/button";
 
+import Categories from "../navbar/categories";
 import Search from "../navbar/Search";
 import { Icons } from "../shared/icons";
 import { MainNav } from "./main-nav";
@@ -33,48 +34,51 @@ export function NavBar({
   const signInModal = useSigninModal();
 
   return (
-    <header
-      className={`sticky top-0 z-40 flex w-full justify-center bg-background/60 backdrop-blur-xl transition-all ${
-        scroll ? (scrolled ? "border-b" : "bg-background/0") : "border-b"
-      }`}
-    >
-      <div className="container flex h-[60px] items-center justify-between py-4">
-        <MainNav items={items}>{children}</MainNav>
-        <Search />
-        <div className="flex items-center space-x-3">
-          {rightElements}
+    <>
+      <header
+        className={`sticky top-0 z-40 flex w-full flex-col justify-center bg-background/60 align-middle backdrop-blur-xl transition-all ${
+          scroll ? (scrolled ? "border-b" : "bg-background/0") : "border-b"
+        }`}
+      >
+        <div className="container flex h-[60px] items-center justify-between py-4">
+          <MainNav items={items}>{children}</MainNav>
+          <Search />
+          <div className="flex items-center space-x-3">
+            {rightElements}
 
-          {!user ? (
-            <Link
-              href="/login"
-              className={cn(
-                buttonVariants({
-                  variant: "outline",
-                  rounded: "full",
-                }),
-                "px-4",
-              )}
-            >
-              Login Page
-            </Link>
-          ) : null}
+            {!user ? (
+              <Link
+                href="/login"
+                className={cn(
+                  buttonVariants({
+                    variant: "outline",
+                    rounded: "full",
+                  }),
+                  "px-4",
+                )}
+              >
+                Login Page
+              </Link>
+            ) : null}
 
-          {user ? (
-            <UserAccountNav user={user} />
-          ) : (
-            <Button
-              className="gap-2 px-4"
-              variant="default"
-              size="sm"
-              rounded="full"
-              onClick={signInModal.onOpen}
-            >
-              <span>Sign In</span>
-              <Icons.arrowRight className="size-4" />
-            </Button>
-          )}
+            {user ? (
+              <UserAccountNav user={user} />
+            ) : (
+              <Button
+                className="gap-2 px-4"
+                variant="default"
+                size="sm"
+                rounded="full"
+                onClick={signInModal.onOpen}
+              >
+                <span>Sign In</span>
+                <Icons.arrowRight className="size-4" />
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+        <Categories />
+      </header>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
+import getCurrentUser from "@/actions/getCurrentUser";
 
-import { currentUser } from "@/lib/auth";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { UserNameForm } from "@/components/forms/user-name-form";
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export default async function SettingsPage() {
-  const user = await currentUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     redirect("/login");

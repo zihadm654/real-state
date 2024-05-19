@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
+import getCurrentUser from "@/actions/getCurrentUser";
 
 import { dashboardConfig } from "@/config/dashboard";
-import { currentUser } from "@/lib/auth";
 import { DashboardNav } from "@/components/layout/nav";
 import { NavBar } from "@/components/layout/navbar";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -13,7 +13,7 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
-  const user = await currentUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     return notFound();

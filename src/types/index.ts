@@ -1,26 +1,31 @@
-import { User } from "@prisma/client";
+import { Listing, Reservation, User } from "@prisma/client";
 
 import { TListing, TPlaces } from "@/lib/validations/schema";
 
 import { Icons } from "../components/shared/icons";
 
-// export type User = {
-//   token: string;
-//   user: {
-//     id: number;
-//     email: string;
-//     firstName: string;
-//     lastName: string;
-//     role: string;
-//     phoneNumber: string | null;
-//     isSeller: boolean | null;
-//     isEmailConfirmed: boolean | null;
-//     isPhoneNumberConfirmed: boolean | null;
-//     createdAt: string;
-//     updatedAt: string;
-//     name?: string;
-//   };
-// };
+export type SafeListing = Omit<Listing, "createdAt"> & {
+  createdAt: string;
+};
+
+export type SafeReservation = Omit<
+  Reservation,
+  "createdAt" | "startDate" | "endDate" | "listing"
+> & {
+  createdAt: string;
+  startDate: string;
+  endDate: string;
+  listing: SafeListing;
+};
+
+export type SafeUser = Omit<
+  User,
+  "createdAt" | "updatedAt" | "emailVerified"
+> & {
+  createdAt: string;
+  updatedAt: string;
+  emailVerified: string | null;
+};
 export interface safeListings extends TListing {
   id: string;
   isActive: boolean;
