@@ -11,6 +11,7 @@ import {
 import type { User } from "next-auth";
 import { signOut } from "next-auth/react";
 
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,8 +21,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserAvatar } from "@/components/shared/user-avatar";
 
+import { buttonVariants } from "../ui/button";
+
 interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: Pick<User, "name" | "image" | "email">;
+  user: Pick<User, "name" | "image" | "email" | "id">;
 }
 
 export function UserAccountNav({ user }: UserAccountNavProps) {
@@ -34,65 +37,89 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <div className="flex items-center justify-start gap-2 p-2">
-          <div className="flex flex-col space-y-1 leading-none">
-            {user?.name && <p className="font-medium">{user?.name}</p>}
-            {user?.email && (
-              <p className="w-[200px] truncate text-sm text-muted-foreground">
-                {user?.email}
-              </p>
-            )}
-          </div>
-        </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="flex items-center space-x-2.5">
-            <LayoutDashboard className="size-4" />
-            <p className="text-sm">Dashboard</p>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/listings" className="flex items-center space-x-2.5">
-            <Plus className="size-4" />
-            <p className="text-sm">My Listings</p>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/favorites" className="flex items-center space-x-2.5">
-            <CreditCard className="size-4" />
-            <p className="text-sm">My Favoirates</p>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/reservations" className="flex items-center space-x-2.5">
-            <Settings className="size-4" />
-            <p className="text-sm">My Reservations</p>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link
-            href="/dashboard/settings"
-            className="flex items-center space-x-2.5"
-          >
-            <Settings className="size-4" />
-            <p className="text-sm">Settings</p>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onSelect={(event) => {
-            event.preventDefault();
-            signOut({
-              callbackUrl: `${window.location.origin}/`,
-            });
-          }}
-        >
-          <div className="flex items-center space-x-2.5">
-            <LogOut className="size-4" />
-            <p className="text-sm">Log out </p>
-          </div>
-        </DropdownMenuItem>
+        {user ? (
+          <>
+            <div className="flex items-center justify-start gap-2 p-2">
+              <div className="flex flex-col space-y-1 leading-none">
+                {user?.name && <p className="font-medium">{user?.name}</p>}
+                {user?.email && (
+                  <p className="w-[200px] truncate text-sm text-muted-foreground">
+                    {user?.email}
+                  </p>
+                )}
+              </div>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard" className="flex items-center space-x-2.5">
+                <LayoutDashboard className="size-4" />
+                <p className="text-sm">Dashboard</p>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/listings" className="flex items-center space-x-2.5">
+                <Plus className="size-4" />
+                <p className="text-sm">My Listings</p>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/favorites" className="flex items-center space-x-2.5">
+                <CreditCard className="size-4" />
+                <p className="text-sm">My Favoirates</p>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                href="/reservations"
+                className="flex items-center space-x-2.5"
+              >
+                <Settings className="size-4" />
+                <p className="text-sm">My Reservations</p>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                href="/dashboard/settings"
+                className="flex items-center space-x-2.5"
+              >
+                <Settings className="size-4" />
+                <p className="text-sm">Settings</p>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onSelect={(event) => {
+                event.preventDefault();
+                signOut({
+                  callbackUrl: `${window.location.origin}/`,
+                });
+              }}
+            >
+              <div className="flex items-center space-x-2.5">
+                <LogOut className="size-4" />
+                <p className="text-sm">Log out </p>
+              </div>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            {!user ? (
+              <Link
+                href="/login"
+                className={cn(
+                  buttonVariants({
+                    variant: "outline",
+                    rounded: "full",
+                  }),
+                  "px-4",
+                )}
+              >
+                Login
+              </Link>
+            ) : null}
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

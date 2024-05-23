@@ -4,22 +4,23 @@ import { useCallback, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SafeListing, SafeReservation, SafeUser } from "@/types";
+import { User } from "@prisma/client";
 import { format } from "date-fns";
 
 import useCountries from "@/hooks/use-countries";
 import HeartButton from "@/components/listings/HeartButton";
 
-import Button from "../Button";
+// import Button from "../Button";
 import ClientOnly from "../ClientOnly";
 
 interface ListingCardProps {
-  data: SafeListing;
-  reservation?: SafeReservation;
+  data: any;
+  reservation?: any;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
   actionId?: string;
-  currentUser?: SafeUser | null;
+  currentUser?: any | null;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -34,20 +35,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
   const router = useRouter();
   const { getByValue } = useCountries();
 
-  const location = getByValue(data.locationValue);
-
-  const handleCancel = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-
-      if (disabled) {
-        return;
-      }
-
-      onAction?.(actionId);
-    },
-    [disabled, onAction, actionId],
-  );
+  const location = getByValue(data.location);
 
   const price = useMemo(() => {
     if (reservation) {
@@ -83,7 +71,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             rounded-xl
           "
         >
-          <Image
+          {/* <Image
             fill
             className="
               h-full 
@@ -94,7 +82,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             "
             src={data.image}
             alt="Listing"
-          />
+          /> */}
           <div
             className="
             absolute
@@ -102,7 +90,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             top-3
           "
           >
-            <HeartButton listingId={data.id} currentUser={currentUser} />
+            {/* <HeartButton listingId={data.id} currentUser={currentUser} /> */}
           </div>
         </div>
         <div className="text-lg font-semibold">
@@ -115,14 +103,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="font-semibold">$ {price}</div>
           {!reservation && <div className="font-light">night</div>}
         </div>
-        {onAction && actionLabel && (
+        {/* {onAction && actionLabel && (
           <Button
             disabled={disabled}
             small
             label={actionLabel}
             onClick={handleCancel}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

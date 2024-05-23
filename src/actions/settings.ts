@@ -4,14 +4,15 @@ import { getUserByEmail, getUserById } from "@/utils/user";
 import bcrypt from "bcryptjs";
 import * as z from "zod";
 
-import { currentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { sendVerificationEmail } from "@/lib/email";
 import { generateVerificationToken } from "@/lib/token";
 import { SettingsSchema } from "@/lib/validations/schema";
 
+import getCurrentUser from "./getCurrentUser";
+
 export const settings = async (values: z.infer<typeof SettingsSchema>) => {
-  const user = await currentUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     return { error: "Unauthorized" };

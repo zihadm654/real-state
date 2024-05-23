@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { SafeUser } from "@/types";
+import { User } from "@prisma/client";
 import { IconType } from "react-icons";
 
 import useCountries from "@/hooks/use-countries";
@@ -14,7 +15,7 @@ const Map = dynamic(() => import("../Map"), {
 });
 
 interface ListingInfoProps {
-  user: SafeUser;
+  user: User;
   description: string;
   guestCount: number;
   roomCount: number;
@@ -92,7 +93,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
         {description}
       </div>
       <hr />
-      <Map center={coordinates} />
+      {/* <Map locationValue={coordinates} /> */}
     </div>
   );
 };

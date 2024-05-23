@@ -1,7 +1,11 @@
+import { Suspense } from "react";
 import getCurrentUser from "@/actions/getCurrentUser";
 import getListings from "@/actions/getListings";
+import { Listing } from "@prisma/client";
 
 import { infos } from "@/config/landing";
+import { TListing } from "@/lib/validations/schema";
+import { Skeleton } from "@/components/ui/skeleton";
 import ClientOnly from "@/components/ClientOnly";
 import Container from "@/components/Container";
 import EmptyState from "@/components/EmptyState";
@@ -17,12 +21,12 @@ import { PreviewLanding } from "@/components/sections/preview-landing";
 import { Testimonials } from "@/components/sections/testimonials";
 
 interface IProps {
-  searchParams: any;
+  searchParams: Listing;
 }
 export default async function IndexPage({ searchParams }: IProps) {
   const listings = await getListings(searchParams);
   const user = await getCurrentUser();
-
+  console.log(listings, "listings");
   if (listings.length === 0) {
     return (
       <ClientOnly>
@@ -39,7 +43,7 @@ export default async function IndexPage({ searchParams }: IProps) {
             grid
             grid-cols-1 
             gap-8 
-            pt-24 
+            py-12
             sm:grid-cols-2 
             md:grid-cols-3
             lg:grid-cols-4
@@ -47,9 +51,15 @@ export default async function IndexPage({ searchParams }: IProps) {
             2xl:grid-cols-6
           "
           >
-            {listings.map((listing: any) => (
-              <ListingCard currentUser={user} key={listing.id} data={listing} />
-            ))}
+            <Suspense fallback={<Skeleton />}>
+              {listings?.map((listing: any) => (
+                <ListingCard
+                  currentUser={user}
+                  key={listing.id}
+                  data={listing}
+                />
+              ))}
+            </Suspense>
           </div>
         </Container>
       </ClientOnly>

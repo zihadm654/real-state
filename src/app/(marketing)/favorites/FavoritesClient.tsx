@@ -1,12 +1,13 @@
 import { SafeListing, SafeUser } from "@/types";
+import { Listing, User } from "@prisma/client";
 
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ListingCard from "@/components/listings/ListingCard";
 
 interface FavoritesClientProps {
-  listings: SafeListing[];
-  currentUser?: SafeUser | null;
+  listings: any;
+  currentUser?: any | null;
 }
 
 const FavoritesClient: React.FC<FavoritesClientProps> = ({
@@ -30,7 +31,11 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
         "
       >
         {listings.map((listing: any) => (
-          <ListingCard user={currentUser} key={listing.id} data={listing} />
+          <ListingCard
+            currentUser={currentUser}
+            key={listing.id}
+            data={listing}
+          />
         ))}
       </div>
     </Container>

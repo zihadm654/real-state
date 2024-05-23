@@ -1,15 +1,30 @@
 "use server";
 
-// import { uploadFile } from './upload';
-import { ListingSchema, TListing } from "@/lib/validations/schema";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { Listing } from "@prisma/client";
 
-export const addListing = async (data: TListing, token: string) => {
-  try {
-    // const res = await uploadFile(data.photos);
-    // toast.success('photos upload success');
-  } catch (error) {
-    // toast.error('photos upload failed');
-    console.log(error);
+import { prisma } from "@/lib/db";
+import { ListingSchema } from "@/lib/validations/schema";
+
+import getCurrentUser from "./getCurrentUser";
+
+export async function createListing(data: Listing) {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return redirect("/login");
   }
-  const userInputs = ListingSchema.parse(data);
-};
+  const result = ListingSchema.safeParse(data);
+
+  try {
+    await prisma.listing.create({
+      data: {
+        ...data,
+        userId: currentUser.id,
+      },
+    });
+  } catch (error) {
+    return "server error";
+  }
+  revalidatePath("/");
+}

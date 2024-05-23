@@ -1,62 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { StepListItem } from "@/types";
+import { createListing } from "@/actions/addListing";
+import { SafeListing, StepListItem } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { ListingSchema, TListing } from "@/lib/validations/schema";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
 import Container from "@/components/listings/Container";
 import Dropzone from "@/components/listings/dropzone";
 
-import Business from "./business";
+import { categories } from "../navbar/categories";
+import CategoryInput from "./CategoryInput";
 import Details from "./details";
 import Location from "./location";
-import RoomType from "./roomType";
 // import { uploadFile } from '@/actions/upload';
-import SubCategory from "./subCategory";
 import CreateWelcome from "./welcome";
 
 export default function MultiForm() {
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const delta = currentStep - previousStep;
-  const [selectPosition, setSelectPosition] = useState();
-  const form = useForm<TListing>({
+  const [selectPosition, setSelectPosition] = useState("");
+
+  const form = useForm<SafeListing>({
     mode: "onBlur",
     resolver: zodResolver(ListingSchema),
   });
-  // watch the specific property
-  // const businessNature = form.watch('businessNature');
-  // const listingType = form.watch('listingType');
-  // const eventType = form.watch('eventType');
-
-  // const discountAvailableField =
-  //   eventType === 'ONSITE'
-  //     ? 'onsiteEvent.isDiscountAvailable'
-  //     : 'onlineEvent.isDiscountAvailable';
-  // const isDiscountAvailable = form.watch(discountAvailableField);
-
-  // const categoryField =
-  //   eventType === 'ONSITE' ? 'onsiteEvent.category' : 'onlineEvent.category';
-  // const category = form.watch(categoryField);
-  // const transferService = form.watch(`onsiteEvent.transferService`);
   //submit function
-  const processForm: SubmitHandler<TListing> = async (data) => {
-    console.log(data);
-    try {
-      // const res = await uploadFile(data.photos);
-      // toast('photos upload success');
-    } catch (error) {
-      // toast('photos upload failed');
+  const processForm: SubmitHandler<SafeListing> = async (data) => {
+    const result = await createListing(data);
+
+    if (!result) {
+      toast.error("Something went wrong");
+      console.log("Something went wrong");
+      return;
     }
-    const userInputs = ListingSchema.parse(data);
-    console.log(userInputs);
-    // reset();
-    setCurrentStep(0);
+
+    // if (result?.error) {
+    //   // set local error state
+    //   console.log(result?.error);
+    //   return;
+    // }
+
+    form.reset();
   };
 
   type FieldName = keyof TListing;
@@ -89,6 +79,7 @@ export default function MultiForm() {
       setCurrentStep((step) => step - 1);
     }
   };
+  const category = form.watch("category");
   const watch = form.watch;
   // watch all the field
   useEffect(() => {
@@ -98,6 +89,13 @@ export default function MultiForm() {
     return () => subscription.unsubscribe();
   }, [form, watch]);
 
+  // const setCustomValue = (id: string, value: any) => {
+  //   form.setValue(id, value, {
+  //     shouldDirty: true,
+  //     shouldTouch: true,
+  //     shouldValidate: true,
+  //   });
+  // };
   // steps of multi form
   const steps: StepListItem[] = [
     {
@@ -107,82 +105,48 @@ export default function MultiForm() {
       description: `We at Digital Marketplace for Tourism, welcome all the individuals and businesses on our booking service platform. Here, you can list Accommodation and Events offering based in Africa and Asia. Focused on tourism niche and regional specific services, the sellers will be able to take great advantage among buyers around the world. We wish everyone who is connected with us, for the prosperity of this community and help boost business operations around the region. May we all prosper`,
     },
     {
-      label: "Location",
+      label: "Category",
       id: "2",
+      name: "Select the category",
+      description:
+        "Share some details about your business and the type of listing you want to host.",
+      fields: ["category"],
+    },
+    {
+      label: "Location",
+      id: "3",
       name: "Specify your event location",
       description:
         "Let's get started by specifying the location where you want to host your event.",
       fields: ["location"],
     },
     {
-      label: "Business",
-      id: "3",
-      name: "Tell us about your business",
+      label: "Details",
+      id: "4",
+      name: "Give your details info",
       description:
-        "Share some details about your business and the type of listing you want to host.",
+        "Let's get started by specifying the details where you want to host your event.",
       fields: [
-        "businessNature",
-        "individualNbr",
-        "individualTaxIdNbr",
-        "businessRegistrationNbr",
-        "businessTaxIdNbr",
-        "eventType",
-        "listingType",
+        "title",
+        "description",
+        "price",
+        "guests",
+        "bedrooms",
+        "bathrooms",
+        "rooms",
       ],
     },
     {
       label: "Photos",
-      id: "6",
+      id: "5",
       name: "Photos for the beautiful listing",
       description:
         "We recommend having at least five of these top amenities. You’ll be able to add other amenities after you publish your listing.",
-      fields: ["photos"],
-    },
-    {
-      label: "Preview",
-      id: "7",
-      name: "Preview all your selections",
-      description: "preview all the selections and validate",
-      fields: [
-        "location",
-        "businessNature",
-        "eventType",
-        "listingType",
-        "currency",
-        "price",
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.name`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.highlight`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.category`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.language`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.price`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.business`,
-        // `${
-        //   eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"
-        // }.experiential`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.nbrOfDays`,
-        // `${
-        //   eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"
-        // }.isDiscountAvailable`,
-        // `${
-        //   eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"
-        // }.hostSkillLevel`,
-        // `${
-        //   eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"
-        // }.maxAttendances`,
-        // `${
-        //   eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"
-        // }.specialInterest`,
-        // `${
-        //   eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"
-        // }.healthAndWellness`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.hoursPerDay`,
-        // `${eventType === "ONSITE" ? "onsiteEvent" : "onlineEvent"}.discount`,
-        "photos",
-      ],
+      fields: ["image"],
     },
     {
       label: "complete",
-      id: "8",
+      id: "6",
       name: "Complete",
       description:
         "We recommend having at least five of these top amenities. You’ll be able to add other amenities after you publish your listing.",
@@ -236,6 +200,28 @@ export default function MultiForm() {
 
           {currentStep === 1 && (
             <Container steps={steps} delta={delta} currentStep={currentStep}>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {categories.map((item) => (
+                  <div key={item.label} className="col-span-1">
+                    <CategoryInput
+                      onClick={() =>
+                        form.setValue("category", item.label, {
+                          shouldDirty: true,
+                          shouldTouch: true,
+                          shouldValidate: true,
+                        })
+                      }
+                      selected={category === item.label}
+                      label={item.label}
+                      icon={item.icon}
+                    />
+                  </div>
+                ))}
+              </div>
+            </Container>
+          )}
+          {currentStep === 2 && (
+            <Container steps={steps} delta={delta} currentStep={currentStep}>
               <Location
                 form={form}
                 selectPosition={selectPosition}
@@ -243,69 +229,19 @@ export default function MultiForm() {
               />
             </Container>
           )}
-          {/* {currentStep === 2 && (
-            <Container steps={steps} delta={delta} currentStep={currentStep}>
-              <Business
-                offerType={listingType}
-                businessNature={businessNature}
-                form={form}
-              />
-            </Container>
-          )}
           {currentStep === 3 && (
             <Container steps={steps} delta={delta} currentStep={currentStep}>
-              <SubCategory
-                category={category}
-                eventType={
-                  eventType === "ONLINE" ? "onlineEvent" : "onsiteEvent"
-                }
-                form={form}
-              />
+              <Details form={form} />
             </Container>
           )}
           {currentStep === 4 && (
             <Container steps={steps} delta={delta} currentStep={currentStep}>
-              <RoomType
-                eventType={
-                  eventType === "ONLINE" ? "onlineEvent" : "onsiteEvent"
-                }
-                isDiscountAvailable={isDiscountAvailable}
-                transferService={transferService}
-                form={form}
-              />
-            </Container>
-          )}
-          {currentStep === 5 && (
-            <Container steps={steps} delta={delta} currentStep={currentStep}>
               <div className="upload__img">
-                <Dropzone
-                  register={form.register}
-                  className="dropzone"
-                  name="photos"
-                  form={form}
-                />
+                <Dropzone form={form} />
               </div>
             </Container>
           )}
-
-          {currentStep === 6 && (
-            <Container steps={steps} delta={delta} currentStep={currentStep}>
-              <Details
-                category={category}
-                isDiscountAvailable={isDiscountAvailable}
-                eventType={
-                  eventType === "ONLINE" ? "onlineEvent" : "onsiteEvent"
-                }
-                offerType={listingType}
-                businessNature={businessNature}
-                transferService={transferService}
-                selectPosition={selectPosition}
-                setPosition={setSelectPosition}
-                form={form}
-              />
-            </Container>
-          )} */}
-          {currentStep === 7 && (
+          {currentStep === 5 && (
             <Container steps={steps} delta={delta} currentStep={currentStep}>
               <h3>Thanks for creating a listing</h3>
             </Container>
@@ -314,12 +250,7 @@ export default function MultiForm() {
       </Form>
       {/* Navigation */}
       <div className="flex w-full items-center justify-between px-4">
-        <Button
-          type="button"
-          onClick={prev}
-          disabled={currentStep === 0}
-          className={`${currentStep === 0 ? "hidden" : ""}`}
-        >
+        <Button type="button" onClick={prev} disabled={currentStep === 0}>
           Back
         </Button>
         <Button

@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 
-import Button from "./Button";
 import Heading from "./Heading";
+import { Button } from "./ui/button";
 
 interface EmptyStateProps {
   title?: string;
@@ -33,10 +33,11 @@ const EmptyState: React.FC<EmptyStateProps> = ({
       <div className="mt-4 w-48">
         {showReset && (
           <Button
-            outline
-            label="Remove all filters"
+            // outline
             onClick={() => router.push("/")}
-          />
+          >
+            Remove all filters
+          </Button>
         )}
       </div>
     </div>

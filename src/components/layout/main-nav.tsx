@@ -11,7 +11,6 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 import { Icons } from "@/components/shared/icons";
 
 import Search from "../navbar/Search";
-import UserMenu from "../navbar/UserMenu";
 
 interface MainNavProps {
   items?: MainNavItem[];

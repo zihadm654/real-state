@@ -1,21 +1,25 @@
 import { Listing, Reservation, User } from "@prisma/client";
 
-import { TListing, TPlaces } from "@/lib/validations/schema";
-
 import { Icons } from "../components/shared/icons";
 
-export type SafeListing = Omit<Listing, "createdAt"> & {
-  createdAt: string;
+export type SafeListing = Omit<
+  Listing,
+  "createdAt" | "updatedAt" | "userId" | "id"
+> & {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
 };
 
 export type SafeReservation = Omit<
   Reservation,
-  "createdAt" | "startDate" | "endDate" | "listing"
+  "createdAt" | "updatedAt" | "startDate" | "endDate" | "listing"
 > & {
   createdAt: string;
   startDate: string;
   endDate: string;
-  listing: SafeListing;
+  listing: Listing;
 };
 
 export type SafeUser = Omit<
@@ -25,23 +29,6 @@ export type SafeUser = Omit<
   createdAt: string;
   updatedAt: string;
   emailVerified: string | null;
-};
-export interface safeListings extends TListing {
-  id: string;
-  isActive: boolean;
-  isRetired: boolean;
-  sellerId: number;
-}
-
-export type safePlaces = Omit<
-  TPlaces,
-  "id" | "rating" | "creadtedAt" | "_count" | "rating" | "images"
-> & {
-  id: number;
-  createdAt: string;
-  rating: number;
-  _count: object;
-  images: object;
 };
 
 export type StepListItem = {

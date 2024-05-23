@@ -1,42 +1,35 @@
 "use client";
 
-import L from "leaflet";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { icon } from "leaflet";
 
-// @ts-ignore
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon.src,
-  iconRetinaUrl: markerIcon2x.src,
-  shadowUrl: markerShadow.src,
+import useCountries from "@/hooks/use-countries";
+
+const ICON = icon({
+  iconUrl:
+    "https://images.vexels.com/media/users/3/131261/isolated/preview/b2e48580147ca0ed3f970f30bf8bb009-karten-standortmarkierung.png",
+  iconSize: [50, 50],
 });
 
-interface MapProps {
-  center?: number[];
-}
-
-const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-const attribution =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
-const Map: React.FC<MapProps> = ({ center }) => {
+export default function Map({ locationValue }: { locationValue: string }) {
+  const { getByValue } = useCountries();
+  const latLang = getByValue(locationValue)?.latlng;
   return (
     <MapContainer
-      center={(center as L.LatLngExpression) || [51, -0.09]}
-      zoom={center ? 4 : 2}
       scrollWheelZoom={false}
-      className="h-[35vh] rounded-lg"
+      className="relative z-0 h-[50vh] rounded-lg"
+      center={latLang ?? [52.505, -0.09]}
+      zoom={8}
     >
-      <TileLayer url={url} attribution={attribution} />
-      {center && <Marker position={center as L.LatLngExpression} />}
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+
+      <Marker position={latLang ?? [52.505, -0.09]} icon={ICON} />
     </MapContainer>
   );
-};
-
-export default Map;
+}

@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import getCurrentUser from "@/actions/getCurrentUser";
 
-import MultiForm from "../../../components/listings/MultiForm";
+import MultiForm from "@/components/listings/MultiForm";
 
 export const metadata: Metadata = {
   title: "Listing",

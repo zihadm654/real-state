@@ -57,7 +57,7 @@ model User {
   role          UserRole  @default(USER)
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
-  favoriteIds   String[]
+  favoriteIds   String[]  @db.ObjectId
 
   accounts     Account[]
   sessions     Session[]
@@ -119,10 +119,11 @@ model Listing {
   description   String
   image         String
   category      String
-  locationValue String
-  roomCount     Int
-  bathroomCount Int
-  guestCount    Int
+  location  String
+  rooms     Int
+  bedrooms Int
+  bathrooms Int
+  guests    Int
   price         Int
 
   createdAt     DateTime @default(now())
@@ -135,49 +136,16 @@ model Listing {
 
 }
 
-// model Room {
-//   id             String  @id @default(auto()) @map("_id")
-//   title          String
-//   description    String
-//   bedCount       Int     @default(0)
-//   guestCount     Int     @default(0)
-//   bathroomCount  Int     @default(0)
-//   kingBed        Int     @default(0)
-//   queenBed       Int     @default(0)
-//   image          String
-//   breakfastPrice Int
-//   roomPrice      Int
-//   roomService    Boolean @default(false)
-//   Tv             Boolean @default(false)
-//   balcony        Boolean @default(false)
-//   freeWifi       Boolean @default(false)
-//   cityView       Boolean @default(false)
-//   oceanView      Boolean @default(false)
-//   mountainView   Boolean @default(false)
-//   forestView     Boolean @default(false)
-//   AC             Boolean @default(false)
-//   soundProof     Boolean @default(false)
-
-//   listingId String
-//   Listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   userId    String
-
-//   reservation Reservation[]
-
-//   @@index([listingId])
-//   @@index([userId])
-// }
-
 model Reservation {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
   listingId         String  @db.ObjectId
+  
   startDate         DateTime
   endDate           DateTime
   totalPrice        Int
-  // paymentStatus     Boolean  @default(false)
-  // paymentIntentId   String   @unique
+  paymentStatus     Boolean  @default(false)
+  paymentIntentId   String   @unique
   bookedAt          DateTime @default(now())
   createdAt         DateTime @default(now())
 

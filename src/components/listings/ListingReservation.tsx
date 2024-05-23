@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "../Button";
+import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 
 interface ListingReservationProps {
@@ -49,7 +49,9 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       />
       <hr />
       <div className="p-4">
-        <Button disabled={disabled} label="Reserve" onClick={onSubmit} />
+        <Button disabled={disabled} onClick={onSubmit}>
+          Reserve
+        </Button>
       </div>
       <hr />
       <div

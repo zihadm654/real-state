@@ -96,7 +96,7 @@ export const categories = [
     icon: IoDiamond,
     description: "This property is brand new and luxurious!",
   },
-];
+] as const;
 
 const Categories = () => {
   const params = useSearchParams();

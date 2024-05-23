@@ -71,60 +71,21 @@ export const RegisterSchema = z.object({
   }),
 });
 
-export const PlacesForm = z.object({
-  title: z.string().min(1, "firstName is required."),
-  description: z.string().min(3, "lastName is required"),
-  listing_status: z.string(),
-  lat: z.number().positive(),
-  long: z.number().positive(),
-  businessNature: z.string().min(1, "should be sent"),
-  individualNbr: z.string().optional(),
-  individualTaxIdNbr: z.string().optional(),
-  businessRegistrationNbr: z.string().optional(),
-  businessTaxIdNbr: z.string().optional(),
-  street: z.string().min(4, "password must be greater than 4 char"),
-  city: z.string(),
-  province: z.string(),
-  postal_code: z.string(),
-  country: z.string(),
-  subtitle: z.string().optional(),
-  place_type: z.string().optional(),
-  booking_policy: z.string().optional(),
-  id: z.string(),
-  rating: z.number(),
-  count: z.object({
-    rooms: z.number(),
-    bookings: z.number(),
-    reviews: z.number(),
-  }),
-  images: z.array(z.string()),
-});
-
 export const ListingSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  title: z.string().min(1, "title is required"),
-  description: z.string().min(3, "description is required"),
-  image: z.string().min(1, "image is required"),
-  country: z.string().min(1, "country is required"),
-  state: z.string(),
-  city: z.string(),
-  locationValue: z.string(),
-  gym: z.boolean(),
-  spa: z.boolean(),
-  bar: z.boolean(),
-  laundry: z.boolean(),
-  restaurant: z.boolean(),
-  shopping: z.boolean(),
-  freeparking: z.boolean(),
-  bikeRental: z.boolean(),
-  freeWifi: z.boolean(),
-  movieNights: z.boolean(),
-  swimmingPool: z.boolean(),
-  coffeShop: z.boolean(),
+  title: z.string().min(1, { message: "title is required" }),
+  description: z
+    .string()
+    .min(10, { message: "description should be atleast 10 characters" }),
+  image: z.string().min(1, { message: "country is required" }),
+  location: z.string().min(1, { message: "country is required" }),
+  guests: z.coerce.number().positive({ message: "number is required" }),
+  bedrooms: z.coerce.number().positive({ message: "number is required" }),
+  rooms: z.coerce.number().positive({ message: "number is required" }),
+  bathrooms: z.coerce.number().positive({ message: "number is required" }),
+  price: z.coerce.number().positive(),
+  category: z.string().min(1, { message: "category is required" }),
 });
 
 export type TListing = z.infer<typeof ListingSchema>;
-export type TPlaces = z.infer<typeof PlacesForm>;
 export type TRegister = z.infer<typeof RegisterSchema>;
 export type TLogin = z.infer<typeof LoginSchema>;

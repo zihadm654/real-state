@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 import { IconType } from "react-icons";
 
-interface CategoryBoxProps {
+export interface CategoryBoxProps {
   icon: IconType;
   label: string;
   selected?: boolean;

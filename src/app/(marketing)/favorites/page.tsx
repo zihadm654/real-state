@@ -10,7 +10,7 @@ const ListingPage = async () => {
   const listings = await getFavoriteListings();
   const currentUser = await getCurrentUser();
 
-  if (listings.length === 0) {
+  if (listings?.length === 0) {
     return (
       <ClientOnly>
         <EmptyState

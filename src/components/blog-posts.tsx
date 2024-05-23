@@ -10,7 +10,7 @@ export function BlogPosts({ posts }: { posts: any[] }) {
         <h2 className="font-heading mb-4 text-3xl">Last Post</h2>
         <article className="relative grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
-            {posts[0].image && (
+            {/* {posts[0]?.image && (
               <Image
                 alt={posts[0].title}
                 className="w-full rounded-lg border object-cover object-center md:h-64 lg:h-72"
@@ -18,18 +18,18 @@ export function BlogPosts({ posts }: { posts: any[] }) {
                 src={posts[0].image}
                 width={804}
               />
-            )}
+            )} */}
           </div>
           <div className="flex flex-col justify-center">
             <h3 className="font-heading mb-2 text-balance text-2xl md:text-4xl">
-              {posts[0].title}
+              {posts[0]?.title}
             </h3>
-            {posts[0].description && (
+            {posts[0]?.description && (
               <p className="text-balance text-muted-foreground md:text-lg">
-                {posts[0].description}
+                {posts[0]?.description}
               </p>
             )}
-            <Link href={posts[0].slug} className="absolute inset-0">
+            <Link href={posts[0]?.slug} className="absolute inset-0">
               <span className="sr-only">View Article</span>
             </Link>
           </div>
@@ -39,12 +39,12 @@ export function BlogPosts({ posts }: { posts: any[] }) {
       <section>
         <h2 className="font-heading mb-4 text-3xl">Blog Posts</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.slice(1).map((post) => (
+          {posts?.slice(1).map((post) => (
             <article
-              key={post._id}
+              key={post?._id}
               className="group relative flex flex-col space-y-2"
             >
-              {post.image && (
+              {/* {post?.image && (
                 <Image
                   alt={post.title}
                   src={post.image}
@@ -52,21 +52,21 @@ export function BlogPosts({ posts }: { posts: any[] }) {
                   height={452}
                   className="rounded-md border bg-muted transition-colors"
                 />
-              )}
+              )} */}
               <h2 className="font-heading line-clamp-1 text-2xl">
-                {post.title}
+                {post?.title}
               </h2>
-              {post.description && (
+              {post?.description && (
                 <p className="line-clamp-1 text-muted-foreground">
-                  {post.description}
+                  {post?.description}
                 </p>
               )}
-              {post.date && (
+              {post?.date && (
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(post.date)}
+                  {formatDate(post?.date)}
                 </p>
               )}
-              <Link href={post.slug} className="absolute inset-0">
+              <Link href={post?.slug} className="absolute inset-0">
                 <span className="sr-only">View Article</span>
               </Link>
             </article>

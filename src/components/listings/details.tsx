@@ -1,66 +1,149 @@
-import InputSection from './layout/InputSection';
-import SelectionSection from './layout/SelectionSection';
-import DateSection from './layout/DateSection';
-import NumberSection from './layout/NumberSection';
-import Dropzone from '@/components/Dropezone';
-import CountrySelect from '@/components/inputs/CountrySelect';
-import SubCategory from './subCategory';
-import Business from './business';
+import React from "react";
 
-interface TDetails {
-  eventType: string;
-  selectPosition: any;
-  setPosition: any;
-  isDiscountAvailable: boolean;
-  transferService: string;
-  category: any;
-  businessNature: string;
-  offerType: string;
-  form: any;
-}
-const Details = ({
-  eventType,
-  selectPosition,
-  setPosition,
-  isDiscountAvailable,
-  transferService,
-  category,
-  businessNature,
-  offerType,
-  form,
-}: TDetails) => {
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+
+const Details = ({ form }: any) => {
   return (
-    <div className='details'>
-      {/* <Location onChange={onChange} location={location} /> */}
-      <CountrySelect
-        position={selectPosition}
-        setPosition={setPosition}
-        form={form}
-      />
-      <Business
-        form={form}
-        businessNature={businessNature}
-        offerType={offerType}
-      />
-      <InputSection form={form} eventType={eventType} />
-      <SelectionSection
-        isDiscountAvailable={isDiscountAvailable}
-        transferService={transferService}
-        eventType={eventType}
-        form={form}
-      />
-      <DateSection form={form} eventType={eventType} />
-
-      <h4>Person and price information</h4>
-      <SubCategory category={category} eventType={eventType} form={form} />
-      <NumberSection eventType={eventType} form={form} />
-      <div className='upload__img'>
-        <h5>Please select relevent photos</h5>
-        <Dropzone
-          className='dropzone'
-          name='photos'
-          register={form.register}
-          form={form}
+    <div>
+      <div className="mb-5">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Title for your listing" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="mb-5">
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Description for your listing"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="mb-5">
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Price</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="price for your listing"
+                  {...field}
+                  type="number"
+                  min={0}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="mb-5">
+        <FormField
+          control={form.control}
+          name="rooms"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Rooms</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="rooms for your listing"
+                  {...field}
+                  type="number"
+                  min={0}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="mb-5">
+        <FormField
+          control={form.control}
+          name="guests"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Guests</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="guests for your listing"
+                  {...field}
+                  type="number"
+                  min={0}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="mb-5">
+        <FormField
+          control={form.control}
+          name="bedrooms"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bedroom</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="bedroom for your listing"
+                  {...field}
+                  type="number"
+                  min={0}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="mb-5">
+        <FormField
+          control={form.control}
+          name="bathrooms"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Restroom</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="restrooms for your listing"
+                  {...field}
+                  type="number"
+                  min={0}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
       </div>
     </div>
