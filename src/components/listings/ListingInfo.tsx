@@ -1,8 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { SafeUser } from "@/types";
-import { User } from "@prisma/client";
+import { User } from "next-auth";
 import { IconType } from "react-icons";
 
 import useCountries from "@/hooks/use-countries";

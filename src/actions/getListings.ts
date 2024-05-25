@@ -1,13 +1,15 @@
+import { unstable_noStore as noStore } from "next/cache";
+
 import { prisma } from "@/lib/db";
 
 export interface IListingsParams {
   userId?: string;
-  guestCount?: number;
-  roomCount?: number;
-  bathroomCount?: number;
+  guests?: number;
+  rooms?: number;
+  bathrooms?: number;
   startDate?: string;
   endDate?: string;
-  locationValue?: string;
+  location?: string;
   category?: string;
 }
 
@@ -15,10 +17,10 @@ export default async function getListings(params: IListingsParams) {
   try {
     const {
       userId,
-      roomCount,
-      guestCount,
-      bathroomCount,
-      locationValue,
+      rooms,
+      guests,
+      bathrooms,
+      location,
       startDate,
       endDate,
       category,
@@ -34,26 +36,26 @@ export default async function getListings(params: IListingsParams) {
       query.category = category;
     }
 
-    if (roomCount) {
-      query.roomCount = {
-        gte: +roomCount,
+    if (rooms) {
+      query.rooms = {
+        gte: +rooms,
       };
     }
 
-    if (guestCount) {
-      query.guestCount = {
-        gte: +guestCount,
+    if (guests) {
+      query.guests = {
+        gte: +guests,
       };
     }
 
-    if (bathroomCount) {
-      query.bathroomCount = {
-        gte: +bathroomCount,
+    if (bathrooms) {
+      query.bathrooms = {
+        gte: +bathrooms,
       };
     }
 
-    if (locationValue) {
-      query.locationValue = locationValue;
+    if (location) {
+      query.location = location;
     }
 
     if (startDate && endDate) {
@@ -74,7 +76,6 @@ export default async function getListings(params: IListingsParams) {
         },
       };
     }
-
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
@@ -84,7 +85,7 @@ export default async function getListings(params: IListingsParams) {
 
     const safeListings = listings.map((listing) => ({
       ...listing,
-      createdAt: listing.createdAt.toISOString(),
+      createdAt: listing.createdAt,
     }));
 
     return safeListings;
@@ -116,12 +117,12 @@ export async function getListingById(params: IParams) {
 
     return {
       ...listing,
-      createdAt: listing.createdAt.toString(),
+      createdAt: listing.createdAt,
       user: {
         ...listing.user,
-        createdAt: listing.user.createdAt.toString(),
-        updatedAt: listing.user.updatedAt.toString(),
-        emailVerified: listing.user.emailVerified?.toString() || null,
+        createdAt: listing.user.createdAt,
+        updatedAt: listing.user.updatedAt,
+        emailVerified: listing.user.emailVerified || null,
       },
     };
   } catch (error: any) {

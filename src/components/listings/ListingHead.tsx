@@ -42,12 +42,12 @@ const ListingHead: React.FC<ListingHeadProps> = ({
           rounded-xl
         "
       >
-        <Image
+        {/* <Image
           src={imageSrc}
           fill
           className="w-full object-cover"
           alt="Image"
-        />
+        /> */}
         <div
           className="
             absolute

@@ -8,6 +8,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { categories } from "@/components/navbar/categories";
 
+import { CategoryBoxProps } from "./categoryBox";
+
 export function MapFilterItems() {
   const searchParams = useSearchParams();
   const search = searchParams.get("filter");
@@ -26,19 +28,19 @@ export function MapFilterItems() {
 
   return (
     <div className="no-scrollbar mt-5 flex w-full gap-x-10 overflow-x-scroll">
-      {categories?.map((item: any) => (
+      {categories?.map((item: CategoryBoxProps) => (
         <Link
-          key={item.id}
-          href={pathname + "?" + createQueryString("filter", item.name)}
+          key={item.label}
+          href={pathname + "?" + createQueryString("filter", item.label)}
           className={cn(
-            search === item.name
+            search === item.label
               ? "flex-shrink-0 border-b-2 border-black pb-2"
               : "flex-shrink-0 opacity-70",
             "flex flex-col items-center gap-y-3",
           )}
         >
-          <div className="relative h-6 w-6"></div>
-          <p className="text-xs font-medium">{item.title}</p>
+          <div className="relative">{<item.icon className="size-8" />}</div>
+          <p className="text-xs font-medium">{item.label}</p>
         </Link>
       ))}
     </div>

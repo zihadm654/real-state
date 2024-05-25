@@ -29,9 +29,9 @@ export function BlogPosts({ posts }: { posts: any[] }) {
                 {posts[0]?.description}
               </p>
             )}
-            <Link href={posts[0]?.slug} className="absolute inset-0">
+            {/* <Link href={posts[0]?.slug} className="absolute inset-0">
               <span className="sr-only">View Article</span>
-            </Link>
+            </Link> */}
           </div>
         </article>
       </section>
@@ -66,9 +66,9 @@ export function BlogPosts({ posts }: { posts: any[] }) {
                   {formatDate(post?.date)}
                 </p>
               )}
-              <Link href={post?.slug} className="absolute inset-0">
+              {/* <Link href={post?.slug} className="absolute inset-0">
                 <span className="sr-only">View Article</span>
-              </Link>
+              </Link> */}
             </article>
           ))}
         </div>

@@ -98,30 +98,30 @@ export const categories = [
   },
 ] as const;
 
-const Categories = () => {
-  const params = useSearchParams();
-  const category = params?.get("category");
-  const pathname = usePathname();
-  const isMainPage = pathname === "/";
+// const Categories = () => {
+//   const params = useSearchParams();
+//   const category = params?.get("category");
+//   const pathname = usePathname();
+//   const isMainPage = pathname === "/";
 
-  if (!isMainPage) {
-    return null;
-  }
+//   if (!isMainPage) {
+//     return null;
+//   }
 
-  return (
-    <Container>
-      <div className="flex w-full flex-row items-center justify-between overflow-x-auto pt-4">
-        {categories?.map((item: any) => (
-          <CategoryBox
-            key={item.label}
-            label={item.label}
-            icon={item.icon}
-            selected={category === item.label}
-          />
-        ))}
-      </div>
-    </Container>
-  );
-};
+//   return (
+//     <Container>
+//       <div className="flex w-full flex-row items-center justify-between overflow-x-auto pt-4">
+//         {categories?.map((item: any) => (
+//           <CategoryBox
+//             key={item.label}
+//             label={item.label}
+//             icon={item.icon}
+//             selected={category === item.label}
+//           />
+//         ))}
+//       </div>
+//     </Container>
+//   );
+// };
 
-export default Categories;
+// export default Categories;

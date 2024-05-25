@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { allPosts } from "contentlayer/generated";
 import { compareDesc } from "date-fns";
 

@@ -9,7 +9,6 @@ import useScroll from "@/hooks/use-scroll";
 import { useSigninModal } from "@/hooks/use-signin-modal";
 import { Button } from "@/components/ui/button";
 
-import Categories from "../navbar/categories";
 import Search from "../navbar/Search";
 import { Icons } from "../shared/icons";
 import { MainNav } from "./main-nav";
@@ -62,7 +61,6 @@ export function NavBar({
             )}
           </div>
         </div>
-        <Categories />
       </header>
     </>
   );

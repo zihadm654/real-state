@@ -2,32 +2,24 @@ import { Listing, Reservation, User } from "@prisma/client";
 
 import { Icons } from "../components/shared/icons";
 
-export type SafeListing = Omit<
-  Listing,
-  "createdAt" | "updatedAt" | "userId" | "id"
-> & {
-  id: string;
+export type SafeListing = Omit<Listing, "createdAt"> & {
   createdAt: Date;
-  updatedAt: Date;
-  userId: string;
 };
 
 export type SafeReservation = Omit<
   Reservation,
-  "createdAt" | "updatedAt" | "startDate" | "endDate" | "listing"
+  "createdAt" | "startDate" | "endDate" | "listing"
 > & {
-  createdAt: string;
-  startDate: string;
-  endDate: string;
-  listing: Listing;
+  createdAt: Date;
+  updatedAt: Date;
+  startDate?: string;
+  endDate?: string;
+  listing: SafeListing;
 };
 
-export type SafeUser = Omit<
-  User,
-  "createdAt" | "updatedAt" | "emailVerified"
-> & {
-  createdAt: string;
-  updatedAt: string;
+export type SafeUser = Omit<User, "createdAt" | "emailVerified"> & {
+  createdAt: Date;
+  updatedAt: Date;
   emailVerified: string | null;
 };
 

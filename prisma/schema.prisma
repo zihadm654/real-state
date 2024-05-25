@@ -30,7 +30,7 @@ model Account {
   session_state     String?
   createdAt         DateTime @default(now()) @map(name: "created_at")
   updatedAt         DateTime @default(now()) @map(name: "updated_at")
-
+  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -119,19 +119,17 @@ model Listing {
   description   String
   image         String
   category      String
-  location  String
-  rooms     Int
-  bedrooms Int
-  bathrooms Int
-  guests    Int
+  location      String
+  rooms         Int
+  bedrooms      Int
+  bathrooms     Int
+  guests        Int
   price         Int
 
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
 
   reservations Reservation[]
 
-  // @@fulltext([title])
   user User @relation(fields: [userId], references: [id],onDelete: Cascade)
 
 }
@@ -144,9 +142,9 @@ model Reservation {
   startDate         DateTime
   endDate           DateTime
   totalPrice        Int
-  paymentStatus     Boolean  @default(false)
-  paymentIntentId   String   @unique
-  bookedAt          DateTime @default(now())
+  // paymentStatus     Boolean  @default(false)
+  // paymentIntentId   String   @unique
+  // bookedAt          DateTime @default(now())
   createdAt         DateTime @default(now())
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -1,10 +1,12 @@
 "use client";
 
+// import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { SafeListing, SafeReservation, SafeUser } from "@/types";
-import { Listing, Reservation, User } from "@prisma/client";
 import { differenceInDays, eachDayOfInterval } from "date-fns";
+import { User } from "next-auth";
+import { Range } from "react-date-range";
 import { toast } from "sonner";
 
 import Container from "@/components/Container";
@@ -22,9 +24,9 @@ const initialDateRange = {
 interface ListingClientProps {
   reservations?: any[];
   listing: any & {
-    user: User;
+    user: any;
   };
-  currentUser?: any | null;
+  currentUser?: any;
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({
@@ -55,45 +57,54 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [dateRange, setDateRange] = useState<Range>();
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
 
-  const onCreateReservation = useCallback(() => {
+  const onCreateReservation = useCallback(async () => {
     if (!currentUser) {
-      // return loginModal.onOpen();
+      redirect("/login");
     }
     setIsLoading(true);
 
-    // axios
-    //   .post("/api/reservations", {
-    //     totalPrice,
-    //     startDate: dateRange.startDate,
-    //     endDate: dateRange.endDate,
-    //     listingId: listing?.id,
-    //   })
-    //   .then(() => {
-    //     toast.success("Listing reserved!");
-    //     setDateRange(initialDateRange);
-    //     router.push("/trips");
-    //   })
-    //   .catch(() => {
-    //     toast.error("Something went wrong.");
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+    try {
+      const response = await fetch("/api/reservations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          totalPrice,
+          startDate: dateRange.startDate,
+          endDate: dateRange.endDate,
+          listingId: listing?.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to reserve listing");
+      }
+
+      const data = await response.json(); // Parse the response data
+
+      toast.success("Listing reserved!");
+      setDateRange(initialDateRange);
+      router.push("/trips");
+    } catch (error) {
+      console.error("Error reserving listing:", error);
+      toast.error("Something went wrong.");
+    } finally {
+      setIsLoading(false); // Update loading state regardless of success or failure
+    }
   }, [totalPrice, dateRange, listing?.id, router, currentUser]);
 
-  // useEffect(() => {
-  //   if (dateRange.startDate && dateRange.endDate) {
-  //     const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate);
+  useEffect(() => {
+    if (dateRange.startDate && dateRange.endDate) {
+      const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate);
 
-  //     if (dayCount && listing.price) {
-  //       setTotalPrice(dayCount * listing.price);
-  //     } else {
-  //       setTotalPrice(listing.price);
-  //     }
-  //   }
-  // }, [dateRange, listing.price]);
+      if (dayCount && listing.price) {
+        setTotalPrice(dayCount * listing.price);
+      } else {
+        setTotalPrice(listing.price);
+      }
+    }
+  }, [dateRange, listing.price]);
 
   return (
     <Container>
@@ -109,7 +120,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             imageSrc={listing.image}
             locationValue={listing.location}
             id={listing.id}
-            // currentUser={currentUser}
+            currentUser={currentUser}
           />
           <div
             className="
@@ -137,7 +148,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 md:col-span-3
               "
             >
-              {/* <ListingReservation
+              <ListingReservation
                 price={listing.price}
                 totalPrice={totalPrice}
                 onChangeDate={(value) => setDateRange(value)}
@@ -145,7 +156,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 onSubmit={onCreateReservation}
                 disabled={isLoading}
                 disabledDates={disabledDates}
-              /> */}
+              />
             </div>
           </div>
         </div>

@@ -201,7 +201,7 @@ export default function MultiForm() {
           {currentStep === 1 && (
             <Container steps={steps} delta={delta} currentStep={currentStep}>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {categories.map((item) => (
+                {categories?.map((item) => (
                   <div key={item.label} className="col-span-1">
                     <CategoryInput
                       onClick={() =>

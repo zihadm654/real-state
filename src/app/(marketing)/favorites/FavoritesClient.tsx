@@ -30,7 +30,7 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
           2xl:grid-cols-6
         "
       >
-        {listings.map((listing: any) => (
+        {listings?.map((listing: any) => (
           <ListingCard
             currentUser={currentUser}
             key={listing.id}

@@ -16,20 +16,14 @@ import ClientOnly from "../ClientOnly";
 interface ListingCardProps {
   data: any;
   reservation?: any;
-  onAction?: (id: string) => void;
   disabled?: boolean;
-  actionLabel?: string;
-  actionId?: string;
   currentUser?: any | null;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
   data,
   reservation,
-  onAction,
   disabled,
-  actionLabel,
-  actionId = "",
   currentUser,
 }) => {
   const router = useRouter();
@@ -90,7 +84,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             top-3
           "
           >
-            {/* <HeartButton listingId={data.id} currentUser={currentUser} /> */}
+            <HeartButton listingId={data.id} currentUser={currentUser} />
           </div>
         </div>
         <div className="text-lg font-semibold">

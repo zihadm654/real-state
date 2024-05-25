@@ -1,31 +1,20 @@
 import { Suspense } from "react";
 import getCurrentUser from "@/actions/getCurrentUser";
 import getListings from "@/actions/getListings";
+import { SafeListing } from "@/types";
 import { Listing } from "@prisma/client";
 
-import { infos } from "@/config/landing";
-import { TListing } from "@/lib/validations/schema";
 import { Skeleton } from "@/components/ui/skeleton";
 import ClientOnly from "@/components/ClientOnly";
 import Container from "@/components/Container";
 import EmptyState from "@/components/EmptyState";
 import ListingCard from "@/components/listings/ListingCard";
 import { MapFilterItems } from "@/components/MapFilter";
-import Categories from "@/components/navbar/categories";
-import { BentoGrid } from "@/components/sections/bentogrid";
-import { Features } from "@/components/sections/features";
-import { HeroLanding } from "@/components/sections/hero-landing";
-import { InfoLanding } from "@/components/sections/info-landing";
-import { Powered } from "@/components/sections/powered";
-import { PreviewLanding } from "@/components/sections/preview-landing";
-import { Testimonials } from "@/components/sections/testimonials";
 
-interface IProps {
-  searchParams: Listing;
-}
-export default async function IndexPage({ searchParams }: IProps) {
-  const listings = await getListings(searchParams);
+export default async function IndexPage({ searchParams }: any) {
   const user = await getCurrentUser();
+  const listings = await getListings({ userId: user?.id! });
+
   console.log(listings, "listings");
   if (listings.length === 0) {
     return (
@@ -43,34 +32,51 @@ export default async function IndexPage({ searchParams }: IProps) {
             grid
             grid-cols-1 
             gap-8 
-            py-12
-            sm:grid-cols-2 
-            md:grid-cols-3
-            lg:grid-cols-4
-            xl:grid-cols-5
-            2xl:grid-cols-6
+            py-2
           "
           >
-            <Suspense fallback={<Skeleton />}>
-              {listings?.map((listing: any) => (
-                <ListingCard
-                  currentUser={user}
-                  key={listing.id}
-                  data={listing}
-                />
-              ))}
+            <MapFilterItems />
+            <Suspense key={searchParams?.filter} fallback={<Skeleton />}>
+              <ShowItems searchParams={searchParams} />
             </Suspense>
           </div>
         </Container>
       </ClientOnly>
-      {/* <HeroLanding />
-      <PreviewLanding />
-      <Powered />
-      <BentoGrid />
-      <InfoLanding data={infos[0]} reverse={true} /> */}
-      {/* <InfoLanding data={infos[1]} /> */}
-      {/* <Features />
-      <Testimonials /> */}
+    </>
+  );
+}
+
+async function ShowItems({
+  searchParams,
+}: {
+  searchParams?: {
+    filter?: string;
+    location?: string;
+    guests?: string;
+    rooms?: string;
+    bathrooms?: string;
+  };
+}) {
+  const currentUser = await getCurrentUser();
+  const listings = await getListings({ userId: currentUser?.id });
+  if (listings.length === 0) {
+    return (
+      <ClientOnly>
+        <EmptyState showReset />
+      </ClientOnly>
+    );
+  }
+  return (
+    <>
+      <div className="lg:gird-cols-4 mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-3">
+        {listings?.map((listing: any) => (
+          <ListingCard
+            currentUser={currentUser}
+            key={listing.id}
+            data={listing}
+          />
+        ))}
+      </div>
     </>
   );
 }
