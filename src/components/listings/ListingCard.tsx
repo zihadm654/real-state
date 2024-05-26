@@ -65,18 +65,20 @@ const ListingCard: React.FC<ListingCardProps> = ({
             rounded-xl
           "
         >
-          {/* <Image
-            fill
-            className="
+          {data.image && (
+            <Image
+              fill
+              className="
               h-full 
               w-full 
               object-cover 
               transition 
               group-hover:scale-110
             "
-            src={data.image}
-            alt="Listing"
-          /> */}
+              src={data.image}
+              alt="Listing"
+            />
+          )}
           <div
             className="
             absolute

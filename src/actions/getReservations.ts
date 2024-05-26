@@ -1,5 +1,7 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { SafeReservation } from "@/types";
 
 import { prisma } from "@/lib/db";
 
@@ -56,7 +58,13 @@ export default async function getReservations(params: IParams) {
   }
 }
 
-export async function addReservation(data: SafeReservation) {
+interface IAParams {
+  listingId?: string;
+  startDate?: Date;
+  endDate?: Date;
+  totalPrice: number;
+}
+export async function addReservation(data: IAParams) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -69,7 +77,7 @@ export async function addReservation(data: SafeReservation) {
     return;
   }
 
-  await prisma.listing.update({
+  const res = await prisma.listing.update({
     where: {
       id: listingId,
     },
@@ -84,4 +92,30 @@ export async function addReservation(data: SafeReservation) {
       },
     },
   });
+  revalidatePath("/trips");
+}
+
+interface IParams {
+  reservationId?: string;
+}
+export async function deleteReservation({ params }: { params: IParams }) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    redirect("/login");
+  }
+
+  const { reservationId } = params;
+
+  if (!reservationId || typeof reservationId !== "string") {
+    throw new Error("Invalid ID");
+  }
+
+  await prisma.reservation.deleteMany({
+    where: {
+      id: reservationId,
+      OR: [{ userId: currentUser.id }, { listing: { userId: currentUser.id } }],
+    },
+  });
+  revalidatePath("/trips");
 }

@@ -3,6 +3,7 @@ import NextAuth, { User, type DefaultSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
 type UserId = string;
+type FavoriteIds = string;
 
 declare module "next-auth/jwt" {
   interface JWT {
@@ -20,6 +21,7 @@ declare module "next-auth" {
   interface Session {
     user: ExtendedUser & {
       id: UserId;
+      favoriteIds: FavoriteIds[];
     };
   }
 }

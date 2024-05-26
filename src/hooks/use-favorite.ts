@@ -1,5 +1,9 @@
 import { useCallback, useMemo } from "react";
 import { redirect, useRouter } from "next/navigation";
+import {
+  addFavoriteListings,
+  deleteFavoriteListing,
+} from "@/actions/getFavoriteListings";
 import { SafeUser } from "@/types";
 import { toast } from "sonner";
 
@@ -30,7 +34,9 @@ const useFavorite = ({ listingId, currentUser }: IUseFavorite) => {
 
         if (hasFavorited) {
           // request = () => axios.delete(`/api/favorites/${listingId}`);
+          await deleteFavoriteListing({ listingId });
         } else {
+          await addFavoriteListings(listingId);
           // request = () => axios.post(`/api/favorites/${listingId}`);
         }
 

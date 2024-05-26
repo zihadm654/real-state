@@ -1,4 +1,4 @@
-import { unstable_noStore as noStore } from "next/cache";
+"use server";
 
 import { prisma } from "@/lib/db";
 

@@ -3,6 +3,7 @@
 // import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
+import { addReservation } from "@/actions/getReservations";
 import { SafeListing, SafeReservation, SafeUser } from "@/types";
 import { differenceInDays, eachDayOfInterval } from "date-fns";
 import { User } from "next-auth";
@@ -66,6 +67,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
     setIsLoading(true);
 
     try {
+      // const res = addReservation({
+      //   totalPrice,
+      //   startDate: dateRange.startDate,
+      //   endDate: dateRange.endDate,
+      //   listingId: listing?.id,
+      // });
       const response = await fetch("/api/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

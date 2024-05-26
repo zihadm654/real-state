@@ -22,25 +22,25 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
   const router = useRouter();
   const [deletingId, setDeletingId] = useState("");
 
-  const onDelete = useCallback(
-    (id: string) => {
-      setDeletingId(id);
+  // const onDelete = useCallback(
+  //   (id: string) => {
+  //     setDeletingId(id);
 
-      // axios
-      //   .delete(`/api/listings/${id}`)
-      //   .then(() => {
-      //     toast.success("Listing deleted");
-      //     router.refresh();
-      //   })
-      //   .catch((error) => {
-      //     toast.error(error?.response?.data?.error);
-      //   })
-      //   .finally(() => {
-      //     setDeletingId("");
-      //   });
-    },
-    [router],
-  );
+  //     // axios
+  //     //   .delete(`/api/listings/${id}`)
+  //     //   .then(() => {
+  //     //     toast.success("Listing deleted");
+  //     //     router.refresh();
+  //     //   })
+  //     //   .catch((error) => {
+  //     //     toast.error(error?.response?.data?.error);
+  //     //   })
+  //     //   .finally(() => {
+  //     //     setDeletingId("");
+  //     //   });
+  //   },
+  //   [router],
+  // );
 
   return (
     <Container>

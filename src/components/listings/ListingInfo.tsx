@@ -7,6 +7,7 @@ import { IconType } from "react-icons";
 import useCountries from "@/hooks/use-countries";
 import ListingCategory from "@/components/listings/listingCategory";
 
+import ClientOnly from "../ClientOnly";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Map = dynamic(() => import("../Map"), {
@@ -40,7 +41,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
 }) => {
   const { getByValue } = useCountries();
 
-  const coordinates = getByValue(locationValue)?.latlng;
+  const coordinates = getByValue(locationValue)?.value;
 
   return (
     <div className="col-span-4 flex flex-col gap-8">
@@ -92,7 +93,9 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
         {description}
       </div>
       <hr />
-      {/* <Map locationValue={coordinates} /> */}
+      <ClientOnly>
+        <Map locationValue={coordinates!} />
+      </ClientOnly>
     </div>
   );
 };

@@ -24,7 +24,7 @@ export const metadata = {
     "Next.js",
     "React",
     "Prisma",
-    "Neon",
+    "Mongodb",
     "Auth.js",
     "shadcn ui",
     "Resend",
@@ -33,10 +33,10 @@ export const metadata = {
   ],
   authors: [
     {
-      name: "mickasmt",
+      name: "zihadm654",
     },
   ],
-  creator: "mickasmt",
+  creator: "zihadm654",
   metadataBase: new URL(siteConfig.url),
   openGraph: {
     type: "website",
@@ -51,7 +51,7 @@ export const metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: "@miickasmt",
+    creator: "@zihadm654",
   },
   icons: {
     icon: "/favicon.ico",

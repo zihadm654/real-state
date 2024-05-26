@@ -11,7 +11,7 @@ import { ListingSchema, TListing } from "@/lib/validations/schema";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import Container from "@/components/listings/Container";
-import Dropzone from "@/components/listings/dropzone";
+import ImageUpload from "@/components/listings/dropzone";
 
 import { categories } from "../navbar/categories";
 import CategoryInput from "./CategoryInput";
@@ -38,6 +38,9 @@ export default function MultiForm() {
       toast.error("Something went wrong");
       console.log("Something went wrong");
       return;
+    }
+    if (result) {
+      toast.success("Listing created successfully");
     }
 
     // if (result?.error) {
@@ -80,6 +83,7 @@ export default function MultiForm() {
     }
   };
   const category = form.watch("category");
+  const image = form.watch("image");
   const watch = form.watch;
   // watch all the field
   useEffect(() => {
@@ -89,13 +93,6 @@ export default function MultiForm() {
     return () => subscription.unsubscribe();
   }, [form, watch]);
 
-  // const setCustomValue = (id: string, value: any) => {
-  //   form.setValue(id, value, {
-  //     shouldDirty: true,
-  //     shouldTouch: true,
-  //     shouldValidate: true,
-  //   });
-  // };
   // steps of multi form
   const steps: StepListItem[] = [
     {
@@ -237,7 +234,16 @@ export default function MultiForm() {
           {currentStep === 4 && (
             <Container steps={steps} delta={delta} currentStep={currentStep}>
               <div className="upload__img">
-                <Dropzone form={form} />
+                <ImageUpload
+                  value={image}
+                  onChange={(value) =>
+                    form.setValue("image", value, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
+                    })
+                  }
+                />
               </div>
             </Container>
           )}

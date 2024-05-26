@@ -25,15 +25,11 @@ type TLocation = {
 
 const Location = ({ selectPosition, setPosition, form }: TLocation) => {
   const { getAll } = useCountries();
-  const Map = useMemo(
-    () =>
-      dynamic(() => import("@/components/Map"), {
-        ssr: false,
-        loading: () => <Skeleton className="h-[50vh] w-full" />,
-      }),
-    [selectPosition],
-  );
-
+  const LazyMap = dynamic(() => import("@/components/Map"), {
+    ssr: false,
+    loading: () => <Skeleton className="h-[50vh] w-full" />,
+  });
+  const location = form.watch("location");
   return (
     <div className="location">
       <h2 className="mb-10 text-3xl font-semibold tracking-tight transition-colors">
@@ -57,11 +53,13 @@ const Location = ({ selectPosition, setPosition, form }: TLocation) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {getAll()?.map((item: any) => (
-                    <SelectItem key={item.value} value={item.value}>
-                      {item.flag} {item.label} / {item.region}
-                    </SelectItem>
-                  ))}
+                  <SelectGroup>
+                    {getAll()?.map((item: any) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.flag} {item.label} / {item.region}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </FormItem>
@@ -69,7 +67,7 @@ const Location = ({ selectPosition, setPosition, form }: TLocation) => {
         />
       </div>
       <div className="map__content">
-        <Map locationValue={selectPosition} />
+        <LazyMap locationValue={location} />
       </div>
     </div>
   );

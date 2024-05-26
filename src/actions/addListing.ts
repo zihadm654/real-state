@@ -26,6 +26,7 @@ export async function createListing(data: SafeListing) {
           userId: currentUser.id,
         },
       });
+      return { success: "listing has been created" };
     } catch (error) {
       return "server error";
     }
