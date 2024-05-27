@@ -12,7 +12,7 @@ import { CategoryBoxProps } from "./categoryBox";
 
 export function MapFilterItems() {
   const searchParams = useSearchParams();
-  const search = searchParams.get("filter");
+  const search = searchParams.get("category");
   const pathname = usePathname();
 
   const createQueryString = useCallback(
@@ -31,7 +31,7 @@ export function MapFilterItems() {
       {categories?.map((item: CategoryBoxProps) => (
         <Link
           key={item.label}
-          href={pathname + "?" + createQueryString("filter", item.label)}
+          href={pathname + "?" + createQueryString("category", item.label)}
           className={cn(
             search === item.label
               ? "flex-shrink-0 border-b-2 border-black pb-2"

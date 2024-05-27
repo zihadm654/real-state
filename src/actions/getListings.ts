@@ -1,6 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { prisma } from "@/lib/db";
+
+import getCurrentUser from "./getCurrentUser";
 
 export interface IListingsParams {
   userId?: string;
@@ -125,6 +129,23 @@ export async function getListingById(params: IParams) {
         emailVerified: listing.user.emailVerified || null,
       },
     };
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+export async function deleteListingById(params: IParams) {
+  const currentUser = await getCurrentUser();
+  try {
+    const { listingId } = params;
+
+    const listing = await prisma.listing.deleteMany({
+      where: {
+        id: listingId,
+        userId: currentUser?.id,
+      },
+    });
+    revalidatePath("/listings");
+    return listing;
   } catch (error: any) {
     throw new Error(error);
   }

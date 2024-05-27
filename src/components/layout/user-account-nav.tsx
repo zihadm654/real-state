@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import {
+  BookMarked,
+  CalendarHeart,
   CreditCard,
+  LandPlot,
   LayoutDashboard,
   LogOut,
+  Plane,
   Plus,
   Settings,
 } from "lucide-react";
@@ -57,14 +61,14 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/listings" className="flex items-center space-x-2.5">
-                <Plus className="size-4" />
-                <p className="text-sm">My Listings</p>
+              <Link href="/trips" className="flex items-center space-x-2.5">
+                <Plane className="size-4" />
+                <p className="text-sm">My Trips</p>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/favorites" className="flex items-center space-x-2.5">
-                <CreditCard className="size-4" />
+                <CalendarHeart className="size-4" />
                 <p className="text-sm">My Favoirates</p>
               </Link>
             </DropdownMenuItem>
@@ -73,8 +77,17 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
                 href="/reservations"
                 className="flex items-center space-x-2.5"
               >
-                <Settings className="size-4" />
+                <BookMarked className="size-4" />
                 <p className="text-sm">My Reservations</p>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                href="/properties"
+                className="flex items-center space-x-2.5"
+              >
+                <LandPlot className="size-4" />
+                <p className="text-sm">My Properties</p>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>

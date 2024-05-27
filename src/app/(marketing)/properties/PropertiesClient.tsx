@@ -1,10 +1,11 @@
 "use client";
 
-// import { toast } from "react-hot-toast";
 // import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { deleteListingById } from "@/actions/getListings";
 import { SafeListing, SafeUser } from "@/types";
+import { toast } from "sonner";
 
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
@@ -22,25 +23,21 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
   const router = useRouter();
   const [deletingId, setDeletingId] = useState("");
 
-  // const onDelete = useCallback(
-  //   (id: string) => {
-  //     setDeletingId(id);
-
-  //     // axios
-  //     //   .delete(`/api/listings/${id}`)
-  //     //   .then(() => {
-  //     //     toast.success("Listing deleted");
-  //     //     router.refresh();
-  //     //   })
-  //     //   .catch((error) => {
-  //     //     toast.error(error?.response?.data?.error);
-  //     //   })
-  //     //   .finally(() => {
-  //     //     setDeletingId("");
-  //     //   });
-  //   },
-  //   [router],
-  // );
+  const onDelete = useCallback(
+    async (id: string) => {
+      setDeletingId(id);
+      try {
+        const res = await deleteListingById({ listingId: id });
+        if (res) {
+          toast.success("Listing deleted successfully");
+          router.refresh();
+        }
+      } catch (error) {
+        toast.error("error.message");
+      }
+    },
+    [router],
+  );
 
   return (
     <Container>
@@ -64,6 +61,8 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
             data={listing}
             disabled={deletingId === listing.id}
             currentUser={currentUser}
+            actionId={listing.id}
+            onAction={onDelete}
           />
         ))}
       </div>

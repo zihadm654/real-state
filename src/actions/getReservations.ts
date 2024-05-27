@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { th } from "date-fns/locale";
 
 import { prisma } from "@/lib/db";
 
@@ -70,52 +71,59 @@ export async function addReservation(data: IAParams) {
   if (!currentUser) {
     redirect("/login");
   }
+  try {
+    const { listingId, startDate, endDate, totalPrice } = data;
 
-  const { listingId, startDate, endDate, totalPrice } = data;
+    if (!listingId || !startDate || !endDate || !totalPrice) {
+      return;
+    }
 
-  if (!listingId || !startDate || !endDate || !totalPrice) {
-    return;
-  }
-
-  const res = await prisma.listing.update({
-    where: {
-      id: listingId,
-    },
-    data: {
-      reservations: {
-        create: {
-          userId: currentUser.id,
-          startDate,
-          endDate,
-          totalPrice,
+    const res = await prisma.listing.update({
+      where: {
+        id: listingId,
+      },
+      data: {
+        reservations: {
+          create: {
+            userId: currentUser.id,
+            startDate,
+            endDate,
+            totalPrice,
+          },
         },
       },
-    },
-  });
-  revalidatePath("/trips");
+    });
+    revalidatePath("/trips");
+    return res;
+  } catch (error: any) {
+    throw new Error(error);
+  }
 }
 
-interface IParams {
-  reservationId?: string;
+interface IDParams {
+  reservationId: string;
 }
-export async function deleteReservation({ params }: { params: IParams }) {
+export async function deleteReservation(params: IDParams) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     redirect("/login");
   }
+  try {
+    const { reservationId } = params;
 
-  const { reservationId } = params;
-
-  if (!reservationId || typeof reservationId !== "string") {
-    throw new Error("Invalid ID");
+    const res = await prisma.reservation.deleteMany({
+      where: {
+        id: reservationId,
+        OR: [
+          { userId: currentUser.id },
+          { listing: { userId: currentUser.id } },
+        ],
+      },
+    });
+    revalidatePath("/trips");
+    return res;
+  } catch (error: any) {
+    throw new Error(error);
   }
-
-  await prisma.reservation.deleteMany({
-    where: {
-      id: reservationId,
-      OR: [{ userId: currentUser.id }, { listing: { userId: currentUser.id } }],
-    },
-  });
-  revalidatePath("/trips");
 }

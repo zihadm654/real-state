@@ -38,57 +38,56 @@ export default async function getFavoriteListings() {
   }
 }
 
-export async function addFavoriteListings(listingId: string) {
+export async function addFavoriteListings(listingId: IParams) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     redirect("/login");
   }
+  try {
+    if (!listingId || typeof listingId !== "string") {
+      throw new Error("Invalid ID");
+    }
+    let favoriteIds = [...(currentUser.favoriteIds || [])];
+    favoriteIds.push(listingId);
 
-  if (!listingId || typeof listingId !== "string") {
-    throw new Error("Invalid ID");
+    const res = await prisma.user.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        favoriteIds,
+      },
+    });
+    revalidatePath("/favorites");
+    return res;
+  } catch (error: any) {
+    throw new Error(error);
   }
-
-  let favoriteIds = [...(currentUser.favoriteIds || [])];
-
-  favoriteIds.push(listingId);
-
-  await prisma.user.update({
-    where: {
-      id: currentUser.id,
-    },
-    data: {
-      favoriteIds,
-    },
-  });
-  revalidatePath("/favorites");
 }
 
-export async function deleteFavoriteListing({
-  listingId,
-}: {
-  listingId: string;
-}) {
+export async function deleteFavoriteListing(listingId: IParams) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     redirect("/login");
   }
+  try {
+    let favoriteIds = [...(currentUser.favoriteIds || [])];
 
-  if (!listingId || typeof listingId !== "string") {
-    throw new Error("Invalid ID");
+    favoriteIds = favoriteIds.filter((id) => id !== listingId);
+
+    const res = await prisma.user.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        favoriteIds,
+      },
+    });
+    revalidatePath("/favorites");
+    return res;
+  } catch (error: any) {
+    throw new Error(error);
   }
-
-  let favoriteIds = [...(currentUser.favoriteIds || [])];
-
-  favoriteIds = favoriteIds.filter((id) => id !== listingId);
-
-  await prisma.user.update({
-    where: {
-      id: currentUser.id,
-    },
-    data: {
-      favoriteIds,
-    },
-  });
 }

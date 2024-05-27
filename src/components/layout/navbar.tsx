@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MainNavItem } from "@/types";
 import type { User } from "next-auth";
 
@@ -31,7 +32,7 @@ export function NavBar({
 }: NavBarProps) {
   const scrolled = useScroll(50);
   const signInModal = useSigninModal();
-
+  const router = useRouter();
   return (
     <>
       <header
@@ -48,16 +49,28 @@ export function NavBar({
             {user ? (
               <UserAccountNav user={user} />
             ) : (
-              <Button
-                className="gap-2 px-4"
-                variant="default"
-                size="sm"
-                rounded="full"
-                onClick={signInModal.onOpen}
-              >
-                <span>Sign In</span>
-                <Icons.arrowRight className="size-4" />
-              </Button>
+              <>
+                <Button
+                  className="gap-2 px-4"
+                  variant="default"
+                  size="sm"
+                  rounded="full"
+                  onClick={() => router.push("/login")}
+                >
+                  <span>Log In</span>
+                  <Icons.arrowRight className="size-4" />
+                </Button>
+                <Button
+                  className="gap-2 px-4"
+                  variant="default"
+                  size="sm"
+                  rounded="full"
+                  onClick={signInModal.onOpen}
+                >
+                  <span>Sign In</span>
+                  <Icons.arrowRight className="size-4" />
+                </Button>
+              </>
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import getCurrentUser from "@/actions/getCurrentUser";
-import getListings from "@/actions/getListings";
+import getListings, { IListingsParams } from "@/actions/getListings";
 import { SafeListing } from "@/types";
 import { Listing } from "@prisma/client";
 
@@ -46,19 +46,12 @@ export default async function IndexPage({ searchParams }: any) {
   );
 }
 
-async function ShowItems({
-  searchParams,
-}: {
-  searchParams?: {
-    filter?: string;
-    location?: string;
-    guests?: string;
-    rooms?: string;
-    bathrooms?: string;
-  };
-}) {
+async function ShowItems({ searchParams }: { searchParams?: IListingsParams }) {
   const currentUser = await getCurrentUser();
-  const listings = await getListings({ userId: currentUser?.id });
+  const listings = await getListings({
+    ...searchParams,
+    userId: currentUser?.id,
+  });
   if (listings.length === 0) {
     return (
       <ClientOnly>

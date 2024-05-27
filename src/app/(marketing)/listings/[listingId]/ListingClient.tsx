@@ -67,28 +67,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
     setIsLoading(true);
 
     try {
-      // const res = addReservation({
-      //   totalPrice,
-      //   startDate: dateRange.startDate,
-      //   endDate: dateRange.endDate,
-      //   listingId: listing?.id,
-      // });
-      const response = await fetch("/api/reservations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          totalPrice,
-          startDate: dateRange.startDate,
-          endDate: dateRange.endDate,
-          listingId: listing?.id,
-        }),
+      const res = await addReservation({
+        totalPrice,
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
+        listingId: listing?.id,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to reserve listing");
-      }
-
-      const data = await response.json(); // Parse the response data
 
       toast.success("Listing reserved!");
       setDateRange(initialDateRange);

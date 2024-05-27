@@ -20,7 +20,7 @@ export default function Map({ locationValue }: { locationValue: string }) {
   return (
     <MapContainer
       scrollWheelZoom={false}
-      className="relative z-0 h-[50vh] w-full max-w-80 rounded-lg px-6"
+      className="relative z-0 h-[50vh] w-full max-w-96 rounded-lg px-6"
       center={latLang ?? [52.505, -0.09]}
       zoom={8}
     >

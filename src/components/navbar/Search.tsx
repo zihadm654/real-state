@@ -4,6 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Loader2, Search } from "lucide-react";
 import { useFormStatus } from "react-dom";
+import { BiSearch } from "react-icons/bi";
 
 import useCountries from "@/hooks/use-countries";
 import { Button } from "@/components/ui/button";
@@ -62,14 +63,75 @@ export default function SearchModalCompnent() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex cursor-pointer items-center rounded-full border px-5 py-2">
-          <div className="flex h-full divide-x font-medium">
-            <p className="px-4">Anywhere</p>
-            <p className="px-4">Any Week</p>
-            <p className="px-4">Add Guests</p>
+        <div
+          className="
+        w-full 
+        cursor-pointer 
+        rounded-full 
+        border-[1px] 
+        mx-4 py-2
+        shadow-sm 
+        transition 
+        hover:shadow-md 
+        md:w-auto
+      "
+        >
+          <div
+            className="
+          flex 
+          flex-row 
+          items-center 
+          justify-between
+        "
+          >
+            <div
+              className="
+            px-6 
+            text-sm 
+            font-semibold
+          "
+            >
+              Any where
+            </div>
+            <div
+              className="
+            hidden 
+            flex-1 
+            border-x-[1px] 
+            px-6 
+            text-center 
+            text-sm 
+            font-semibold 
+            sm:block
+          "
+            >
+              Anytime
+            </div>
+            <div
+              className="
+            flex 
+            flex-row 
+            items-center 
+            gap-3 
+            pl-6 
+            pr-2 
+            text-sm 
+            text-gray-600
+          "
+            >
+              <div className="hidden sm:block">guests</div>
+              <div
+                className="
+              rounded-full 
+              bg-rose-500 
+              p-2 
+              text-white
+            "
+              >
+                <BiSearch size={18} />
+              </div>
+            </div>
           </div>
-
-          <Search className="h-8 w-8 rounded-full bg-primary p-1 text-white" />
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

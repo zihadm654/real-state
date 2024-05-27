@@ -12,12 +12,15 @@ import HeartButton from "@/components/listings/HeartButton";
 
 // import Button from "../Button";
 import ClientOnly from "../ClientOnly";
+import { Button } from "../ui/button";
 
 interface ListingCardProps {
   data: any;
   reservation?: any;
   disabled?: boolean;
   currentUser?: any | null;
+  actionId?: string;
+  onAction?: (id: string) => void;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -25,12 +28,25 @@ const ListingCard: React.FC<ListingCardProps> = ({
   reservation,
   disabled,
   currentUser,
+  onAction,
+  actionId,
 }) => {
   const router = useRouter();
   const { getByValue } = useCountries();
 
   const location = getByValue(data.location);
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
 
+      if (disabled) {
+        return;
+      }
+
+      onAction?.(actionId!);
+    },
+    [disabled, onAction, actionId],
+  );
   const price = useMemo(() => {
     if (reservation) {
       return reservation.totalPrice;
@@ -99,14 +115,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="font-semibold">$ {price}</div>
           {!reservation && <div className="font-light">night</div>}
         </div>
-        {/* {onAction && actionLabel && (
-          <Button
-            disabled={disabled}
-            small
-            label={actionLabel}
-            onClick={handleCancel}
-          />
-        )} */}
+        {onAction && (
+          <Button disabled={disabled} onClick={handleCancel}>
+            Cancel
+          </Button>
+        )}
       </div>
     </div>
   );
