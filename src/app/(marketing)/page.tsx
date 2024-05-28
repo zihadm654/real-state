@@ -1,8 +1,6 @@
 import { Suspense } from "react";
 import getCurrentUser from "@/actions/getCurrentUser";
 import getListings, { IListingsParams } from "@/actions/getListings";
-import { SafeListing } from "@/types";
-import { Listing } from "@prisma/client";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import ClientOnly from "@/components/ClientOnly";

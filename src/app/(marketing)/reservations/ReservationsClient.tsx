@@ -4,6 +4,7 @@
 // import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { deleteReservation } from "@/actions/getReservations";
 import { SafeReservation, SafeUser } from "@/types";
 import { User } from "@prisma/client";
 
@@ -24,9 +25,9 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
   const [deletingId, setDeletingId] = useState("");
 
   const onCancel = useCallback(
-    (id: string) => {
+    async (id: string) => {
       setDeletingId(id);
-
+      deleteReservation({ reservationId: id });
       // axios.delete(`/api/reservations/${id}`)
       // .then(() => {
       //   toast.success('Reservation cancelled');

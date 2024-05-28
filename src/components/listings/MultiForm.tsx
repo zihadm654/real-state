@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
 import { createListing } from "@/actions/addListing";
 import { SafeListing, StepListItem } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +26,7 @@ export default function MultiForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const delta = currentStep - previousStep;
   const [selectPosition, setSelectPosition] = useState("");
-
+  const router = useRouter();
   const form = useForm<SafeListing>({
     mode: "onBlur",
     resolver: zodResolver(ListingSchema),
@@ -33,7 +34,6 @@ export default function MultiForm() {
   //submit function
   const processForm: SubmitHandler<SafeListing> = async (data) => {
     const result = await createListing(data);
-
     if (!result) {
       toast.error("Something went wrong");
       console.log("Something went wrong");
@@ -41,14 +41,8 @@ export default function MultiForm() {
     }
     if (result) {
       toast.success("Listing created successfully");
+      router.push("/");
     }
-
-    // if (result?.error) {
-    //   // set local error state
-    //   console.log(result?.error);
-    //   return;
-    // }
-
     form.reset();
   };
 

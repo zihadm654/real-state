@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { UserSubscriptionPlan } from "@/types";
+
+// import { UserSubscriptionPlan } from "@/types";
 
 import { pricingData } from "@/config/subscriptions";
 import { cn } from "@/lib/utils";

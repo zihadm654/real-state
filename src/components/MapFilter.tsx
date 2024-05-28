@@ -27,7 +27,7 @@ export function MapFilterItems() {
   );
 
   return (
-    <div className="no-scrollbar mt-5 flex w-full gap-x-10 overflow-x-scroll">
+    <div className="no-scrollbar mt-5 flex w-full flex-row items-center justify-between gap-x-10 overflow-x-auto ">
       {categories?.map((item: CategoryBoxProps) => (
         <Link
           key={item.label}

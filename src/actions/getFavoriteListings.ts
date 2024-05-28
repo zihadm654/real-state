@@ -11,32 +11,31 @@ interface IParams {
   listingId?: string;
 }
 
-// export default async function getFavoriteListings() {
-//   try {
-//     const currentUser = await getCurrentUser();
+export default async function getFavoriteListings() {
+  try {
+    const currentUser = await getCurrentUser();
 
-//     if (!currentUser) {
-//       return [];
-//     }
+    if (!currentUser) {
+      return [];
+    }
 
-//     const favorites = await prisma.listing.findMany({
-//       where: {
-//         id: {
-//           in: [...(currentUser.favoriteIds || [])],
-//         },
-//       },
-//     });
+    const favorites = await prisma.listing.findMany({
+      where: {
+        id: {
+          in: [...(currentUser.favoriteIds || [])],
+        },
+      },
+    });
 
-//     const safeFavorites = favorites.map((favorite) => ({
-//       ...favorite,
-//       createdAt: favorite.createdAt.toString(),
-//     }));
+    const safeFavorites = favorites.map((favorite) => ({
+      ...favorite,
+    }));
 
-//     return safeFavorites;
-//   } catch (error: any) {
-//     throw new Error(error);
-//   }
-// }
+    return safeFavorites;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
 
 export async function addFavoriteListings(params: IParams) {
   const currentUser = await getCurrentUser();
@@ -46,37 +45,46 @@ export async function addFavoriteListings(params: IParams) {
   try {
     const { listingId } = params;
 
-    const res = await prisma.favorite.create({
+    let favoriteIds = [...(currentUser.favoriteIds || [])];
+
+    favoriteIds.push(listingId!);
+
+    const user = await prisma.user.update({
+      where: {
+        id: currentUser.id,
+      },
       data: {
-        userId: currentUser.id,
-        id: listingId,
+        favoriteIds,
       },
     });
     revalidatePath("/favorites");
-    return res;
+    return user;
   } catch (error: any) {
     throw new Error(error);
   }
 }
-interface IFParams {
-  favoriteId?: string;
-}
-export async function deleteFavoriteListing(params: IFParams) {
+export async function deleteFavoriteListing(params: IParams) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     redirect("/login");
   }
   try {
-    const { favoriteId } = params;
-    const res = await prisma.favorite.delete({
+    const { listingId } = params;
+    let favoriteIds = [...(currentUser.favoriteIds || [])];
+
+    favoriteIds = favoriteIds.filter((id) => id !== listingId);
+
+    const user = await prisma.user.update({
       where: {
-        userId: currentUser.id,
-        id: favoriteId,
+        id: currentUser.id,
+      },
+      data: {
+        favoriteIds,
       },
     });
     revalidatePath("/favorites");
-    return res;
+    return user;
   } catch (error: any) {
     throw new Error(error);
   }
