@@ -1,12 +1,10 @@
-// FIX: I changed .mjs to .js
-// More info: https://github.com/shadcn-ui/taxonomy/issues/100#issuecomment-1605867844
+const { withContentlayer } = require("next-contentlayer2");
 
-import("./src/env.mjs");
+import("./env.mjs");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
     remotePatterns: [
       {
@@ -23,17 +21,10 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "res.cloudinary.com",
+        hostname: "utfs.io",
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client"],
-  },
 };
-
-// const withContentlayer = createContentlayerPlugin({
-//   // Additional Contentlayer config options
-// });
 
 module.exports = nextConfig;
