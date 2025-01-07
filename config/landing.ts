@@ -54,42 +54,42 @@ export const infos: InfoLdg[] = [
 
 export const features: FeatureLdg[] = [
   {
-    title: "Feature 1",
+    title: "Tracking",
     description:
       "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
     link: "/",
     icon: "nextjs",
   },
   {
-    title: "Feature 2",
+    title: "Cultural Tours",
     description:
       "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
     link: "/",
     icon: "google",
   },
   {
-    title: "Feature 3",
+    title: "Adventure Sports",
     description:
       "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
     link: "/",
     icon: "gitHub",
   },
   {
-    title: "Feature 4",
+    title: "Wildlife Safari",
     description:
       "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
     link: "/",
     icon: "laptop",
   },
   {
-    title: "Feature 5",
+    title: "Meditation",
     description:
       "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
     link: "/",
     icon: "user",
   },
   {
-    title: "Feature 6",
+    title: "Photography",
     description:
       "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
     link: "/",

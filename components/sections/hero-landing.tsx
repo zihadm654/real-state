@@ -1,58 +1,89 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { format } from "date-fns";
+import { CalendarIcon, Search } from "lucide-react";
 
-import { env } from "@/env.mjs";
-import { siteConfig } from "@/config/site";
-import { cn, nFormatter } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { Icons } from "@/components/shared/icons";
+import { Button } from "@/components/ui/button";
 
-export default async function HeroLanding() {
+import { Calendar } from "../ui/calendar";
+import { Input } from "../ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+
+export default function HeroLanding() {
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
   return (
     <section className="space-y-6 py-12 sm:py-20 lg:py-20">
       <div className="container flex max-w-5xl flex-col items-center gap-5 text-center">
-        <Link
-          href="https://twitter.com/miickasmt/status/1810465801649938857"
-          className={cn(
-            buttonVariants({ variant: "outline", size: "sm", rounded: "full" }),
-            "px-4",
-          )}
-          target="_blank"
-        >
-          <span className="mr-3">🎉</span>
-          <span className="hidden md:flex">Introducing&nbsp;</span> Next Auth
-          Roles Template on <Icons.twitter className="ml-2 size-3.5" />
-        </Link>
-
-        <h1 className="font-urban text-balance text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-[66px]">
-          Kick off with a bang with{" "}
-          <span className="text-gradient_indigo-purple font-extrabold">
-            SaaS Starter
-          </span>
+        <h1 className="mb-4 text-6xl font-bold">
+          It&apos;s time to
+          <br />
+          <span className="text-7xl">Discover</span>
         </h1>
-
-        <p
-          className="max-w-2xl text-balance leading-normal text-muted-foreground sm:text-xl sm:leading-8"
-          style={{ animationDelay: "0.35s", animationFillMode: "forwards" }}
-        >
-          Build your next project using Next.js 14, Prisma, Neon, Auth.js v5,
-          Resend, React Email, Shadcn/ui, Stripe.
+        <p className="mb-12 text-xl">
+          Find and book great experiences in Nepal
         </p>
 
-        <div
-          className="flex justify-center space-x-2 md:space-x-4"
-          style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
-        >
-          <Link
-            href="/pricing"
-            prefetch={true}
-            className={cn(
-              buttonVariants({ size: "lg", rounded: "full" }),
-              "gap-2",
-            )}
-          >
-            <span>Go Pricing</span>
-            <Icons.arrowRight className="size-4" />
-          </Link>
+        {/* Search Form */}
+        <div className="mx-auto max-w-4xl rounded-lg p-4 backdrop-blur-sm">
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <Input
+                type="text"
+                placeholder="Anywhere in Nepal"
+                className="w-full"
+              />
+            </div>
+            <div className="flex gap-4">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-[180px] justify-start text-left font-normal"
+                  >
+                    <CalendarIcon className="mr-2 size-4" />
+                    {startDate ? (
+                      format(startDate, "PPP")
+                    ) : (
+                      <span>Start date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={startDate}
+                    onSelect={setStartDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-[180px] justify-start text-left font-normal"
+                  >
+                    <CalendarIcon className="mr-2 size-4" />
+                    {endDate ? format(endDate, "PPP") : <span>End date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={endDate}
+                    onSelect={setEndDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Button className="bg-purple-500 px-8 hover:bg-purple-600">
+                <Search className="size-4" />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

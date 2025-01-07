@@ -12,8 +12,8 @@ export default function Features() {
       <div className="pb-6 pt-28">
         <MaxWidthWrapper>
           <HeaderSection
-            label="Features"
-            title="Discover all features."
+            label="Browse by Category"
+            title="Discover all categories."
             subtitle="Harum quae dolore inventore repudiandae? orrupti aut temporibus
           ariatur."
           />
@@ -61,4 +61,35 @@ export default function Features() {
       </div>
     </section>
   );
+}
+{
+  /* <div className="container relative z-10 mx-auto px-4 pb-24">
+  <h2 className="mb-8 text-3xl font-bold text-white"></h2>
+  <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+    {[
+      "Trekking",
+      "Cultural Tours",
+      "Adventure Sports",
+      "Wildlife Safari",
+      "Meditation",
+      "Photography",
+    ].map((category) => (
+      <div
+        key={category}
+        className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg"
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+          style={{
+            backgroundImage: "url('/placeholder.svg?height=200&width=200')",
+          }}
+        />
+        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/50" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-lg font-medium text-white">{category}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>; */
 }

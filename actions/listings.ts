@@ -1,11 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 
 import { prisma } from "@/lib/db";
-import { getCurrentUser } from "@/lib/session";
 import { listingSchema, TListing } from "@/lib/validations/listing";
 
 interface IParams {

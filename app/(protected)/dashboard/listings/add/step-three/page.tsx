@@ -9,7 +9,7 @@ import { UploadDropzone } from "@/utility/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "sooner";
+import { toast } from "sonner";
 
 import { listingSchema, TListing } from "@/lib/validations/listing";
 import { Button } from "@/components/ui/button";
