@@ -1,4 +1,4 @@
-const { withContentlayer } = require("next-contentlayer2");
+// const { withContentlayer } = require("next-contentlayer2");
 
 import("./env.mjs");
 

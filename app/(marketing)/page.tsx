@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getListings } from "@/actions/listings";
 
 import { infos } from "@/config/landing";
@@ -10,6 +11,7 @@ import InfoLanding from "@/components/sections/info-landing";
 import Powered from "@/components/sections/powered";
 import PreviewLanding from "@/components/sections/preview-landing";
 import Testimonials from "@/components/sections/testimonials";
+import { SkeletonSection } from "@/components/shared/section-skeleton";
 
 interface IProps {
   searchParams: {
@@ -25,7 +27,9 @@ export default async function IndexPage({ searchParams }: IProps) {
   return (
     <>
       <HeroLanding />
-      <BestSelling listings={listings} />
+      <Suspense fallback={<SkeletonSection />}>
+        <BestSelling listings={listings} />
+      </Suspense>
       <Features />
       {/* <BlockPage /> */}
       {/* 

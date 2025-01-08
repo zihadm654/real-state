@@ -1,6 +1,6 @@
 "use client";
 
-import { Hotel } from "@prisma/client";
+import { Listing } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { DataTableColumnHeader } from "./column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 
-export const columns: ColumnDef<Hotel>[] = [
+export const columns: ColumnDef<Listing>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (

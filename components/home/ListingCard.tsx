@@ -31,9 +31,10 @@ const BestSelling = ({ listings }: any) => {
     <div className="container relative z-10 mx-auto py-12">
       <h2 className="mb-8 text-3xl font-bold">Popular Listing</h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {listings?.map((listing: any) => (
-          <ListingCard listing={listing} key={listing.id} />
-        ))}
+        {listings &&
+          listings?.map((listing: any) => (
+            <ListingCard listing={listing} key={listing.id} />
+          ))}
       </div>
     </div>
   );

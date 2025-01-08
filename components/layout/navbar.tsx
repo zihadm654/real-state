@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DocsSearch } from "@/components/docs/search";
+// import { DocsSearch } from "@/components/docs/search";
 import { ModalContext } from "@/components/modals/providers";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
@@ -34,8 +34,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
     docs: docsConfig.mainNav,
   };
 
-  const links =
-    (selectedLayout && configMap[selectedLayout]) || marketingConfig.mainNav;
+  const links = marketingConfig.mainNav;
 
   return (
     <header
@@ -79,7 +78,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
 
         <div className="flex items-center space-x-3">
           {/* right header for docs */}
-          {documentation ? (
+          {/* {documentation ? (
             <div className="hidden flex-1 items-center space-x-4 sm:justify-end lg:flex">
               <div className="hidden lg:flex lg:grow-0">
                 <DocsSearch />
@@ -98,7 +97,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
                 </Link>
               </div>
             </div>
-          ) : null}
+          ) : null} */}
 
           {session ? (
             <Link

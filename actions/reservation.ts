@@ -5,8 +5,8 @@ import { auth } from "@/auth";
 
 import { prisma } from "@/lib/db";
 
-export async function getReservations(roomId: string) {
-  if (!roomId) return null;
+export async function getReservations(listingId: string) {
+  if (!listingId) return null;
   try {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -14,7 +14,6 @@ export async function getReservations(roomId: string) {
     const data = await prisma.reservation.findMany({
       where: {
         paymentStatus: true,
-        roomId: roomId,
         endDate: {
           gt: yesterday,
         },
@@ -34,8 +33,7 @@ export const getReservationByUserId = async () => {
     const reservations = await prisma.reservation.findMany({
       where: { userId: session.user.id },
       include: {
-        room: true,
-        hotel: true,
+        listing: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -45,7 +43,6 @@ export const getReservationByUserId = async () => {
     return reservations;
   } catch (error) {
     console.log(error);
-    throw new Error(error);
   }
 };
 // export async function createRoom(data: TRoom, hotelId: string) {
