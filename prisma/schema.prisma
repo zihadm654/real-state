@@ -12,6 +12,7 @@ datasource db {
 
 enum UserRole {
   ADMIN
+  HOST
   USER
 }
 
@@ -49,24 +50,28 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          UserRole  @default(USER)
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  email           String?          @unique
+  emailVerified   DateTime?
+  image           String?
+  role            UserRole         @default(USER)
+  virtualIdentity VirtualIdentity?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  favoriteIds     String[]         @db.ObjectId
 
   accounts     Account[]
   listings     Listing[]
   reservations Reservation[]
-  favorites    Favorite[]
-  Review       Review[]
+  reviews      Review[]
+  preferences  UserPreference?
+  virtualTours VirtualTourView[]
+  Favorite     Favorite[]
+  experience   Experience[]
   Session      Session[]
 
-  @@map(name: "users")
+  @@map("users")
 }
 
 model VerificationToken {
@@ -79,77 +84,307 @@ model VerificationToken {
   @@map(name: "verification_tokens")
 }
 
-model Listing {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
+enum AmenityType {
+  // ESSENTIAL
+  WIFI
+  AIR_CONDITIONING
+  HEATING
+  KITCHEN
+  WASHER
+  DRYER
 
+  // FEATURES
+  POOL
+  HOT_TUB
+  GYM
+  WORKSPACE
+  TV
+
+  // SAFETY
+  SMOKE_ALARM
+  FIRST_AID
+  FIRE_EXTINGUISHER
+  SECURITY_CAMERAS
+
+  // LOCATION
+  BEACHFRONT
+  WATERFRONT
+  SKI_IN_OUT
+
+  // TRANSPORT
+  FREE_PARKING
+  EV_CHARGER
+  BIKE_RENTAL
+  CAR_RENTAL
+
+  // SERVICES
+  BREAKFAST
+  CLEANING
+  CONCIERGE
+  LUGGAGE_STORAGE
+
+  // OUTDOOR
+  PATIO
+  BBQ_GRILL
+  GARDEN
+
+  // ENTERTAINMENT
+  GAME_CONSOLE
+  POOL_TABLE
+  PIANO
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  VILLA
+  UNIQUE_SPACE
+  ECO_LODGE
+  SMART_HOME
+}
+
+enum SmartDeviceType {
+  THERMOSTAT
+  LOCK
+  LIGHTING
+  SECURITY
+  ENTERTAINMENT
+  APPLIANCE
+}
+
+enum ListingStatus {
+  ACTIVE
+  MAINTENANCE
+  UNAVAILABLE
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  COMPLETED
+  CANCELLED
+}
+
+enum ExperienceType {
+  LOCAL_TOUR
+  COOKING_CLASS
+  ADVENTURE
+  VIRTUAL_TOUR
+  WORKSHOP
+  CULTURAL
+}
+
+enum Badge {
+  SUPERHOST
+  VERIFIED
+  TOP_RATED
+  ECO_FRIENDLY
+  PREMIUM
+}
+
+// type SmartFeature {
+//   type      SmartDeviceType
+//   deviceId  String
+//   status    Json
+//   updatedAt DateTime
+// }
+
+model Listing {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String        @db.ObjectId
   title          String
   description    String
   image          String
+  virtualTourUrl String?
+  arModelUrl     String? // 3D model for AR viewing
   category       String
-  location       String
-  room           Int
-  bed            Int
-  bathroom       Int
-  guest          Int
-  price          Int
-  breakfastPrice Int
-  breakfast      Boolean @default(false)
-  wifi           Boolean @default(false)
-  roomService    Boolean @default(false)
-  parking        Boolean @default(false)
-  pool           Boolean @default(false)
-  balcony        Boolean @default(false)
+  type           PropertyType
+  status         ListingStatus @default(ACTIVE)
 
-  createdAt DateTime @default(now())
+  // Basic Info
+  roomCount     Int
+  bedroomCount  Int
+  bathroomCount Int
+  guestCount    Int
+  price         Float
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // location
+  locationData Json // Detailed location data including coordinates
+
+  // // smart home features
+  // smartFeatures SmartFeature[]
+
+  // sustainability metrics
+  energyRating    Float? // Energy efficiency rating
+  ecoFriendly     Boolean @default(false)
+  solarPowered    Boolean @default(false)
+  waterEfficiency Float? // Water usage efficiency
+  wasteManagement Boolean @default(false)
+  carbonFootprint Float? // CO2 emissions
+  greenCertified  Boolean @default(false)
+
+  // energy metrics
+  // energyMetrics Json[] // Array of {timestamp, consumption, solar, cost}
+
+  // amenities as direct array
+  amenities AmenityType[]
+  badge     Badge[]
+
+  // relations
+  experiences  Experience[]
   reservations Reservation[]
   reviews      Review[]
+  Favorite     Favorite[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  VirtualTourView VirtualTourView[]
+
+  @@map("listings")
 }
 
 model Reservation {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String   @db.ObjectId
-  listingId         String   @db.ObjectId
-  breakfastIncluded Boolean
-  startDate         DateTime
-  endDate           DateTime
-  totalPrice        Int
-  paymentStatus     Boolean  @default(false)
-  paymentIntentId   String   @unique
-  createdAt         DateTime @default(now())
+  id                      String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId                  String            @db.ObjectId
+  listingId               String            @db.ObjectId
+  startDate               DateTime
+  endDate                 DateTime
+  totalPrice              Float
+  status                  ReservationStatus
+  checkInCode             String? // Digital access code
+  virtualConciergeEnabled Boolean           @default(false)
 
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  // Smart Features Settings
+  preferredTemperature Float?
+  lightingPreferences  Json?
+  specialRequests      String?
 
-  @@map("reservations")
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing    Listing     @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  experience Experience?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VirtualIdentity {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @unique @db.ObjectId
+  avatar      String? // Avatar URL
+  bio         String?
+  preferences Json? // User preferences for AI
+  reputation  Float   @default(0)
+  badges      Badge[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Experience {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  reservationId String         @unique @db.ObjectId
+  type          ExperienceType
+  title         String
+  description   String
+  date          DateTime
+  price         Float
+  virtualGuide  Boolean        @default(false)
+  maxCapacity   Int
+  duration      Int // Duration in minutes
+  language      String[]
+  includes      String[]
+  location      Json? // For physical experiences
+  virtualLink   String? // For virtual experiences
+  images        String[]
+
+  // Metadata
+  rating      Float?
+  reviewCount Int      @default(0)
+  bookedCount Int      @default(0)
+  status      String   @default("ACTIVE") // ACTIVE, CANCELLED, COMPLETED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  reviews     Review[]
+  User        User?       @relation(fields: [userId], references: [id])
+  userId      String?     @db.ObjectId
+  Listing     Listing?    @relation(fields: [listingId], references: [id])
+  listingId   String?     @db.ObjectId
+
+  @@index([type])
+  @@map("experiences")
+}
+
+model VirtualTourView {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  listingId    String   @db.ObjectId
+  viewedAt     DateTime @default(now())
+  duration     Int // Duration in seconds
+  completed    Boolean  @default(false)
+  deviceInfo   Json? // Browser/device information
+  ipAddress    String?
+  interactions Json? // Track user interactions
+  exitPoint    String? // Where user left the tour
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([userId, listingId])
+  @@map("virtual_tour_views")
+}
+
+model UserPreference {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String   @unique @db.ObjectId
+  preferredClimate    Json? // Temperature, humidity preferences
+  accessibility       String[] // Accessibility requirements
+  dietaryRestrictions String[]
+  interests           String[] // For experience recommendations
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Review {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String @db.ObjectId
-  listingId String @db.ObjectId
-  comment   String
-  rating    Int
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  listingId   String   @db.ObjectId
+  rating      Float // Overall rating
+  cleanliness Float // Specific ratings
+  accuracy    Float
+  location    Float
+  value       Float
+  comment     String
+  photos      String[] // Review photos
+  verified    Boolean  @default(false)
+  helpful     Int      @default(0)
+  reported    Boolean  @default(false)
 
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing      Listing     @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  Experience   Experience? @relation(fields: [experienceId], references: [id])
+  experienceId String?     @db.ObjectId
+
+  @@map("reviews")
+}
+
+model Favorite {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  listingId String   @db.ObjectId
+  createdAt DateTime @default(now())
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
-  @@map(name: "reviews")
-}
-
-model Favorite {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String @db.ObjectId
-  listingId String @db.ObjectId
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  @@unique([userId, listingId])
   @@map("favorites")
 }
