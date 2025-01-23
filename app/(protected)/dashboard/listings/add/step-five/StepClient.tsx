@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { listingSchema, TListing } from "@/lib/validations/listing";
+import { ListingSchema, TListing } from "@/lib/validations/listing";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,7 +23,7 @@ export default function Step5({ user }: any) {
   const router = useRouter();
   const { formData, clearFormData } = useMultistepFormContext();
   const form = useForm({
-    resolver: zodResolver(listingSchema),
+    resolver: zodResolver(ListingSchema),
     defaultValues: formData,
   });
 
@@ -32,13 +32,40 @@ export default function Step5({ user }: any) {
   };
 
   const onSubmit = async (data: Partial<TListing>) => {
-    const finalFormData = { ...formData, ...data };
-    const res = await createListing(finalFormData, user?.id);
-    if (!res) {
-      toast.error("something went wrong");
+    try {
+      const finalFormData = { ...formData, ...data };
+      console.log('Form data before filtering:', finalFormData);
+      
+      // Filter out empty or undefined fields
+      const filteredFormData = Object.fromEntries(
+        Object.entries(finalFormData).filter(
+          ([_, value]) =>
+            value !== undefined &&
+            value !== null &&
+            value !== "" &&
+            (!Array.isArray(value) || value.length > 0),
+        ),
+      ) as TListing;
+      
+      console.log('Filtered form data:', filteredFormData);
+      
+      // Use the filtered form data as action input
+      const listingResult = await createListing(filteredFormData, user?.id);
+      console.log('Listing creation result:', listingResult);
+      
+      if (!listingResult.success) {
+        toast.error(listingResult.error || "Something went wrong");
+        console.error('Creation error details:', listingResult.details);
+        return;
+      }
+      
+      toast.success("Listing created successfully");
+      router.push("/dashboard/listings");
+      clearFormData();
+    } catch (error) {
+      console.error('Submit error:', error);
+      toast.error("An unexpected error occurred");
     }
-    router.push("/dashboard/listings");
-    clearFormData();
   };
   return (
     <main className="flex flex-col gap-4">

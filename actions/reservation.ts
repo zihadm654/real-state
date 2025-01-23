@@ -11,15 +11,15 @@ export async function getReservations(listingId: string) {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
-    const data = await prisma.reservation.findMany({
-      where: {
-        paymentStatus: true,
-        endDate: {
-          gt: yesterday,
-        },
-      },
-    });
-    return { success: "reservations has been fetched successfully", data };
+    // const data = await prisma.reservation.findMany({
+    //   where: {
+    //     paymentStatus: true,
+    //     endDate: {
+    //       gt: yesterday,
+    //     },
+    //   },
+    // });
+    // return { success: "reservations has been fetched successfully", data };
   } catch (error) {
     return { error: error };
   }
@@ -75,18 +75,18 @@ export async function updateReservation(id: string) {
   }
   if (!id) throw new Error("require id");
 
-  try {
-    await prisma.reservation.update({
-      where: {
-        paymentIntentId: id,
-      },
-      data: { paymentStatus: true },
-    });
-    revalidatePath("/dashboard/reservations");
-    return { success: "reservation has been updated" };
-  } catch (error) {
-    return { error: error };
-  }
+  // try {
+  //   await prisma.reservation.update({
+  //     where: {
+  //       paymentIntentId: id,
+  //     },
+  //     data: { paymentStatus: true },
+  //   });
+  //   revalidatePath("/dashboard/reservations");
+  //   return { success: "reservation has been updated" };
+  // } catch (error) {
+  //   return { error: error };
+  // }
 
   // TODO: perform desired action / mutation
 }

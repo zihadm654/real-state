@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { imageRemove } from "@/actions/image-remove";
+// import { amenities } from "@/content/data/listingTypes";
 import { useMultistepFormContext } from "@/contexts/addListingContext";
 import { UploadDropzone } from "@/utility/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +12,7 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { listingSchema, TListing } from "@/lib/validations/listing";
+import { ListingSchema, TListing } from "@/lib/validations/listing";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -24,33 +25,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { amenities } from "@/content/data/listingTypes";
 
 export default function Step3() {
-  const [image, setImage] = useState("");
   const [imageKey, setImageKey] = useState<string>("");
   const router = useRouter();
 
   const { formData, updateFormData } = useMultistepFormContext();
+  const [image, setImage] = useState<string>(formData.image || "");
   const form = useForm({
     resolver: zodResolver(
-      listingSchema.pick({
-        breakfast: true,
-        wifi: true,
-        parking: true,
-        pool: true,
-        balcony: true,
-        roomService: true,
+      ListingSchema.pick({
         image: true,
+        amenities: true,
+        virtualTourUrl: true,
+        arModelUrl: true,
       }),
     ),
     defaultValues: {
-      breakfast: formData.breakfast,
-      wifi: formData.wifi,
-      parking: formData.parking,
-      pool: formData.pool,
-      balcony: formData.balcony,
-      roomService: formData.roomService,
       image: formData.image,
+      amenities: formData.amenities,
+      virtualTourUrl: formData.virtualTourUrl,
+      arModelUrl: formData.arModelUrl,
     },
   });
 
@@ -75,104 +71,86 @@ export default function Step3() {
     <main className="flex flex-col gap-4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-2 space-y-4">
+          <FormField
+            control={form.control}
+            name="amenities"
+            render={() => (
+              <FormItem>
+                <div className="mb-4">
+                  <FormLabel className="text-base">Amenities</FormLabel>
+                  <FormDescription>
+                    Select the items you want to display in the amenities.
+                  </FormDescription>
+                </div>
+                <div className="grid grid-cols-3 space-y-3">
+                  {amenities.map((item) => (
+                    <FormField
+                      key={item.id}
+                      control={form.control}
+                      name="amenities"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={item.id}
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(item.id)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, item.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item.id,
+                                        ),
+                                      );
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="text-sm font-normal">
+                              {item.name}
+                            </FormLabel>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  ))}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <h5>Additional Information</h5>
+          <div className="flex flex-row items-center justify-start space-x-4">
             <FormField
               control={form.control}
-              name="wifi"
+              name="virtualTourUrl"
               render={({ field }) => (
-                <FormItem className="flex items-end space-x-3">
+                <FormItem>
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Input placeholder="provide Virtual tour url" {...field} />
                   </FormControl>
-                  <FormLabel>Wifi</FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="breakfast"
-              render={({ field }) => (
-                <FormItem className="flex items-end space-x-3">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Breakfast</FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="parking"
-              render={({ field }) => (
-                <FormItem className="flex items-end space-x-3">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Parking</FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="roomService"
-              render={({ field }) => (
-                <FormItem className="flex items-end space-x-3">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Room Service</FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="pool"
-              render={({ field }) => (
-                <FormItem className="flex items-end space-x-3">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Pool</FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="balcony"
-              render={({ field }) => (
-                <FormItem className="flex items-end space-x-3">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Balcony</FormLabel>
+                  <FormDescription>Provide Virtual tour url</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+          <FormField
+            control={form.control}
+            name="arModelUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="provide ar model tour url" {...field} />
+                </FormControl>
+                <FormDescription>Provide Ar Model url</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="image"
@@ -204,7 +182,7 @@ export default function Step3() {
                 ) : (
                   <UploadDropzone
                     endpoint="imageUploader"
-                    className="flex w-full flex-row gap-x-2 rounded bg-green-100 p-4 text-green-900"
+                    className="flex w-full flex-row gap-x-2 rounded p-4 text-green-900"
                     onClientUploadComplete={(res) => {
                       // Do something with the response
                       console.log("Files: ", res);

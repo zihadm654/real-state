@@ -13,22 +13,30 @@ import PreviewLanding from "@/components/sections/preview-landing";
 import Testimonials from "@/components/sections/testimonials";
 import { SkeletonSection } from "@/components/shared/section-skeleton";
 
-interface IProps {
-  searchParams: {
-    title?: string;
-    location?: string;
-  };
-}
 export const dynamic = "force-dynamic";
 
-export default async function IndexPage({ searchParams }: IProps) {
+export default async function IndexPage({
+  params,
+}: {
+  params: Promise<{
+    searchParams: {
+      title?: string;
+      locationData?: {
+        country?: string;
+        city?: string;
+        state?: string;
+      };
+    };
+  }>;
+}) {
+  const searchParams = (await params).searchParams;
   const listings = await getListings(searchParams);
   if (!listings) return <div>listings not found</div>;
   return (
     <>
       <HeroLanding />
       <Suspense fallback={<SkeletonSection />}>
-        <BestSelling listings={listings} />
+        <BestSelling listings={listings.data} />
       </Suspense>
       <Features />
       {/* <BlockPage /> */}

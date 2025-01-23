@@ -10,13 +10,8 @@ export const metadata = constructMetadata({
   title: "Listings - Advanture",
   description: "creation of hotel and rooms",
 });
-interface IProps {
-  searchParams: {
-    title: string;
-    location: string;
-  };
-}
-export default async function ChartsPage({ searchParams }: IProps) {
+
+export default async function ChartsPage() {
   const currentUser = await getCurrentUser();
   const listings = await getUserListings(currentUser?.id!);
   console.log(listings, "listings");
@@ -27,7 +22,7 @@ export default async function ChartsPage({ searchParams }: IProps) {
   return (
     <>
       <DashboardHeader heading="Listings" text="List of listings." />
-      {listings && <DataTable columns={columns} data={listings} />}
+      {listings && <DataTable columns={columns} data={listings.data} />}
     </>
   );
 }

@@ -21,24 +21,36 @@ export default function MultistepFormContextProvider({
 }: {
   children: ReactNode;
 }) {
+  //intial listing value
   const initialFormData: TListing = {
     title: "",
     description: "",
     image: "",
     category: "",
-    location: "",
+    locationData: {
+      lat: 0,
+      lng: 0,
+      country: "",
+      city: "",
+      address: "",
+      state: "",
+      zipCode: "",
+    },
+    roomCount: 0,
+    guestCount: 0,
+    bedroomCount: 0,
+    bathroomCount: 0,
     price: 0,
-    room: 0,
-    guest: 0,
-    bed: 0,
-    bathroom: 0,
-    breakfastPrice: 0,
-    breakfast: false,
-    roomService: false,
-    parking: false,
-    pool: false,
-    wifi: false,
-    balcony: false,
+    type: "APARTMENT",
+    status: "ACTIVE",
+    amenities: [],
+    ecoFriendly: false,
+    greenCertified: false,
+    waterEfficiency: 0,
+    wasteManagement: false,
+    energyRating: 0,
+    carbonFootprint: 0,
+    badge: [],
   };
 
   const [formData, setFormData] = useState<TListing>(() => {

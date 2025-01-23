@@ -5,7 +5,7 @@ import { useMultistepFormContext } from "@/contexts/addListingContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { listingSchema, TListing } from "@/lib/validations/listing";
+import { ListingSchema, TListing } from "@/lib/validations/listing";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,22 +23,20 @@ export default function Step2() {
   const { formData, updateFormData } = useMultistepFormContext();
   const form = useForm({
     resolver: zodResolver(
-      listingSchema.pick({
+      ListingSchema.pick({
         price: true,
-        room: true,
-        breakfastPrice: true,
-        bed: true,
-        guest: true,
-        bathroom: true,
+        roomCount: true,
+        bedroomCount: true,
+        guestCount: true,
+        bathroomCount: true,
       }),
     ),
     defaultValues: {
       price: formData.price,
-      breakfastPrice: formData.breakfastPrice,
-      bed: formData.bed,
-      room: formData.room,
-      guest: formData.guest,
-      bathroom: formData.bathroom,
+      bedroomCount: formData.bedroomCount,
+      roomCount: formData.roomCount,
+      guestCount: formData.guestCount,
+      bathroomCount: formData.bathroomCount,
     },
   });
 
@@ -63,6 +61,7 @@ export default function Step2() {
                 <FormLabel>Price</FormLabel>
                 <FormControl>
                   <Input
+                    defaultValue={field.value}
                     type="number"
                     placeholder="price your listing"
                     {...field}
@@ -77,19 +76,20 @@ export default function Step2() {
           />
           <FormField
             control={form.control}
-            name="breakfastPrice"
+            name="bedroomCount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Breakfast Price</FormLabel>
+                <FormLabel>BedRoom Count</FormLabel>
                 <FormControl>
                   <Input
+                    defaultValue={field.value}
                     type="number"
-                    placeholder="price your breakfast price"
+                    placeholder="bedroom count"
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  Enter the breakfast price of your listing.
+                  Enter Bedroom count of your listing.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -97,28 +97,17 @@ export default function Step2() {
           />
           <FormField
             control={form.control}
-            name="bed"
+            name="roomCount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bed</FormLabel>
+                <FormLabel>Room Count</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="bed count" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Enter bed count of your listing.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="room"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Room</FormLabel>
-                <FormControl>
-                  <Input type="number" placeholder="room count" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="room count"
+                    {...field}
+                    defaultValue={field.value}
+                  />
                 </FormControl>
                 <FormDescription>
                   Enter room count of your listing.
@@ -129,7 +118,7 @@ export default function Step2() {
           />
           <FormField
             control={form.control}
-            name="bathroom"
+            name="bathroomCount"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Bathroom</FormLabel>
@@ -138,6 +127,7 @@ export default function Step2() {
                     type="number"
                     placeholder="bathroom count"
                     {...field}
+                    defaultValue={field.value}
                   />
                 </FormControl>
                 <FormDescription>
@@ -149,12 +139,17 @@ export default function Step2() {
           />
           <FormField
             control={form.control}
-            name="guest"
+            name="guestCount"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Guest</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="guest count" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="guest count"
+                    {...field}
+                    defaultValue={field.value}
+                  />
                 </FormControl>
                 <FormDescription>
                   Enter guest count of your listing.

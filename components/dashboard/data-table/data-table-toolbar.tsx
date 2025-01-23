@@ -71,7 +71,7 @@ export function DataTableToolbar<TData>({
         />
       </div>
       <Button className="mr-4 h-8 lg:flex">
-        <Link href={"/dashboard/listings/add"}>Add Listing</Link>
+        <Link href={"/dashboard/listings/add/step-one"}>Add Listing</Link>
       </Button>
       <DataTableViewOptions table={table} />
     </div>

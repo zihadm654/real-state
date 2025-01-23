@@ -1,34 +1,42 @@
 "use client";
 
+import L from "leaflet";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
-import L from "leaflet";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-const icon = L.icon({
-  iconUrl:
-    "https://images.vexels.com/media/users/3/131261/isolated/preview/b2e48580147ca0ed3f970f30bf8bb009-karten-standortmarkierung.png",
-  iconSize: [50, 50],
+// @ts-ignore
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon.src,
+  iconRetinaUrl: markerIcon2x.src,
+  shadowUrl: markerShadow.src,
 });
 
-export default function Map({
-  coordinates,
-}: {
-  coordinates: { lat: number; lng: number };
-}) {
+interface MapProps {
+  center?: number[];
+}
+
+const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const attribution =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+const Map: React.FC<MapProps> = ({ center }) => {
   return (
     <MapContainer
-      center={[coordinates.lat, coordinates.lng]}
-      zoom={13}
+      center={(center as L.LatLngExpression) || [51, -0.09]}
+      zoom={center ? 4 : 2}
       scrollWheelZoom={false}
-      className="relative z-0 h-[50vh] w-full rounded-lg px-6"
+      className="h-[35vh] rounded-lg"
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[coordinates.lat, coordinates.lng]} icon={icon} />
+      <TileLayer url={url} attribution={attribution} />
+      {center && <Marker position={center as L.LatLngExpression} />}
     </MapContainer>
   );
-}
+};
+
+export default Map;

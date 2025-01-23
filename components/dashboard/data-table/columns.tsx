@@ -15,7 +15,9 @@ export const columns: ColumnDef<Listing>[] = [
       <DataTableColumnHeader column={column} title="id" />
     ),
     cell: ({ row }) => (
-      <div className="w-[150px] capitalize">{row.getValue("id")}</div>
+      <div className="truncate font-medium capitalize">
+        {row.getValue("id")}
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -27,7 +29,7 @@ export const columns: ColumnDef<Listing>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 truncate font-medium">
           <span className="max-w-[500px] truncate font-medium capitalize">
             {row.getValue("title")}
           </span>
@@ -42,8 +44,8 @@ export const columns: ColumnDef<Listing>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium capitalize">
+        <div className="flex space-x-2 truncate font-medium">
+          <span className="max-w-48 truncate font-medium capitalize">
             {row.getValue("description")}
           </span>
         </div>
@@ -57,8 +59,8 @@ export const columns: ColumnDef<Listing>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium capitalize">
+        <div className="flex max-w-[500px] space-x-2">
+          <span className="truncate font-medium capitalize">
             {row.getValue("country")}
           </span>
         </div>
@@ -72,8 +74,8 @@ export const columns: ColumnDef<Listing>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium capitalize">
+        <div className="flex max-w-48 space-x-2 truncate font-medium">
+          <span className="truncate font-medium capitalize">
             {row.getValue("image")}
           </span>
         </div>
@@ -118,31 +120,31 @@ export const columns: ColumnDef<Listing>[] = [
   //     return value.includes(row.getValue(id));
   //   },
   // },
-  // {
-  //   accessorKey: "price",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Price" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const type = row.getValue("price");
-  //     return (
-  //       <div className="flex w-[100px] items-center">
-  //         <span
-  //           className={cn(
-  //             "capitalize",
-  //             type === "income" ? "text-green-500" : "text-red-500",
-  //           )}
-  //         >
-  //           {" "}
-  //           {row.getValue("price")}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return value.includes(row.getValue(id));
-  //   },
-  // },
+  {
+    accessorKey: "price",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Price" />
+    ),
+    cell: ({ row }) => {
+      const type = row.getValue("price");
+      return (
+        <div className="flex w-[100px] items-center">
+          <span
+            className={cn(
+              "capitalize",
+              type === "price" ? "text-green-500" : "text-red-500",
+            )}
+          >
+            {" "}
+            {row.getValue("price")}
+          </span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
