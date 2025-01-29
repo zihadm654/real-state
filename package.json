@@ -81,6 +81,7 @@
     "react-leaflet": "^4.2.1",
     "react-spinners": "^0.13.8",
     "react-textarea-autosize": "^8.5.7",
+    "recharts": "^2.15.1",
     "resend": "^3.5.0",
     "sharp": "^0.33.5",
     "shiki": "^1.29.1",
